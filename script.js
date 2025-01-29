@@ -1,57 +1,41 @@
-let selectedNumbers = [];
-let username = "";
-
 async function login() {
-    username = document.getElementById("username").value;
-    if (!username) return alert("Enter a username");
+    let username = document.getElementById("username").value;
+    let password = document.getElementById("password").value;
 
     let res = await fetch("/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username }),
+        body: JSON.stringify({ username, password })
     });
 
     let data = await res.json();
-    document.getElementById("wallet").innerText = `Wallet Balance: ₹${data.wallet}`;
-}
+    document.getElementById("loginMessage").innerText = data.message;
 
-function selectNumber(num) {
-    if (!selectedNumbers.includes(num)) {
-        selectedNumbers.push(num);
-        document.getElementById("selectedNumbers").innerText = selectedNumbers.join(", ");
+    if (data.success) {
+        localStorage.setItem("username", username);
+        fetchWalletBalance();
     }
 }
 
-async function placeBet() {
-    let betAmount = parseInt(document.getElementById("betAmount").value);
-    if (!betAmount || betAmount < 10) {
-        return alert("Minimum bet amount is ₹10");
-    }
-    if (selectedNumbers.length === 0) {
-        return alert("Select at least one number");
-    }
+async function register() {
+    let username = document.getElementById("username").value;
+    let password = document.getElementById("password").value;
 
-    let res = await fetch("/bet", {
+    let res = await fetch("/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, selectedNumbers, betAmount }),
+        body: JSON.stringify({ username, password })
     });
 
     let data = await res.json();
-    alert(data.message);
-    document.getElementById("wallet").innerText = `Wallet Balance: ₹${data.wallet}`;
-    selectedNumbers = [];
-    document.getElementById("selectedNumbers").innerText = "";
-}
-async function getLatestResult() {
-    let res = await fetch("/latest-result");
-    let data = await res.json();
-    document.getElementById("latestResult").innerText = `Latest Result: ${data.threeDigit} (Single: ${data.singleDigit})`;
+    document.getElementById("loginMessage").innerText = data.message;
 }
 
-setInterval(getLatestResult, 5000); // Update every 5 seconds
 async function fetchWalletBalance() {
-    let res = await fetch("/wallet");
+    let username = localStorage.getItem("username");
+    if (!username) return;
+
+    let res = await fetch(`/wallet?username=${username}`);
     let data = await res.json();
     document.getElementById("walletBalance").innerText = data.balance;
 }
