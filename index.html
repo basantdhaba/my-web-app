@@ -1,29 +1,44 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Web App</title>
+    <title>Satta Matka Game</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
     <header>
-        <h1>Welcome to My Web Application</h1>
+        <h1>Satta Matka Game</h1>
     </header>
+
     <main>
-        <p>This is a simple web app. You can upload this to GitHub and deploy it on Vercel.</p>
-        <button id="clickButton">Click Me</button>
+        <h2>Place Your Bet</h2>
+
+        <!-- Input for placing bet -->
+        <div class="bet-container">
+            <label for="betNumber">Enter your 3-Digit Number:</label>
+            <input type="number" id="betNumber" placeholder="e.g., 123" min="0" max="999">
+            <button onclick="placeBet()">Place Bet</button>
+        </div>
+
+        <!-- Result section -->
+        <div class="result-container">
+            <h3>Result:</h3>
+            <p id="result">--</p>
+        </div>
+
+        <!-- History of results -->
+        <div class="history-container">
+            <h3>Recent Results</h3>
+            <ul id="history"></ul>
+        </div>
     </main>
+
     <footer>
-        <p>&copy; 2025 My Web App</p>
+        <p>&copy; 2025 Satta Matka Game</p>
     </footer>
-    <script src="app.js"></script>
+
+    <script src="script.js"></script>
 </body>
 </html>
-
-<link rel="stylesheet" href="styles.css">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<link rel="stylesheet" href="styles.css">
