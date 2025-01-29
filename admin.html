@@ -6,36 +6,69 @@
     <title>Admin Panel - Satta Matka</title>
     <style>
         body { background-color: #222; color: white; text-align: center; font-family: Arial, sans-serif; }
+        input { padding: 10px; margin: 10px; }
+        button { padding: 10px 20px; cursor: pointer; }
         table { width: 80%; margin: auto; border-collapse: collapse; }
         th, td { border: 1px solid white; padding: 10px; text-align: center; }
-        input { padding: 10px; width: 100px; }
-        button { padding: 10px 20px; cursor: pointer; }
+        #admin-panel { display: none; }
     </style>
 </head>
 <body>
-    <h1>Admin Panel - Satta Matka</h1>
-    
-    <h2>Update Game Results</h2>
-    <label>Enter 3-Digit Result:</label>
-    <input type="text" id="threeDigitResult" maxlength="3">
-    <button onclick="submitResult()">Submit Result</button>
+    <h1>Admin Login - Satta Matka</h1>
 
-    <h2>All Bets</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Username</th>
-                <th>Game Round</th>
-                <th>Bet Type</th>
-                <th>Number</th>
-                <th>Amount</th>
-                <th>Result</th>
-            </tr>
-        </thead>
-        <tbody id="betsTableBody"></tbody>
-    </table>
+    <!-- Login Form -->
+    <div id="login-form">
+        <label>Username:</label>
+        <input type="text" id="admin-username">
+        <label>Password:</label>
+        <input type="password" id="admin-password">
+        <button onclick="login()">Login</button>
+        <p id="login-error" style="color: red; display: none;">Invalid username or password</p>
+    </div>
+
+    <!-- Admin Panel (Hidden until login) -->
+    <div id="admin-panel">
+        <h2>Admin Panel - Satta Matka</h2>
+        <h3>Update Game Results</h3>
+        <label>Enter 3-Digit Result:</label>
+        <input type="text" id="threeDigitResult" maxlength="3">
+        <button onclick="submitResult()">Submit Result</button>
+
+        <h3>All Bets</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Game Round</th>
+                    <th>Bet Type</th>
+                    <th>Number</th>
+                    <th>Amount</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+            <tbody id="betsTableBody"></tbody>
+        </table>
+    </div>
 
     <script>
+        let adminLoggedIn = false;
+
+        // Login function
+        async function login() {
+            let username = document.getElementById("admin-username").value;
+            let password = document.getElementById("admin-password").value;
+
+            if (username === "admin" && password === "admin123") {
+                adminLoggedIn = true;
+                document.getElementById("login-form").style.display = "none";
+                document.getElementById("admin-panel").style.display = "block";
+                fetchBets();
+            } else {
+                document.getElementById("login-error").style.display = "block";
+            }
+        }
+
+        // Fetch all bets from the server
         async function fetchBets() {
             let res = await fetch("/all-bets");
             let data = await res.json();
@@ -56,6 +89,7 @@
             });
         }
 
+        // Submit the 3-digit result and calculate the winnings
         async function submitResult() {
             let threeDigitNumber = document.getElementById("threeDigitResult").value;
             if (!/^\d{3}$/.test(threeDigitNumber)) return alert("Enter a valid 3-digit number!");
@@ -70,8 +104,6 @@
             alert(data.message);
             fetchBets();
         }
-
-        fetchBets();
     </script>
 </body>
 </html>
