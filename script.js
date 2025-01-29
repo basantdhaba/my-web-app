@@ -1,30 +1,32 @@
 let betHistory = []; // Store bet history for display
-let roundResults = []; // Store the round results
-let roundCount = 0; // Track rounds
+let currentResult = null; // Store current result (admin input)
 
 function placeSingleBet() {
     // Get the bet number from the input field
     let betNumber = parseInt(document.getElementById("betNumber").value);
-    if (isNaN(betNumber) || betNumber < 1 || betNumber > 9) {
-        alert("Please enter a valid single number (1-9).");
+    if (isNaN(betNumber) || betNumber < 0 || betNumber > 9) {
+        alert("Please enter a valid single number (0-9).");
         return;
     }
 
-    // Generate the result number (3-digit random for now)
-    let result = generateResult();
-    
-    // Get the single digit result (last digit of the 3-digit number)
-    let singleDigitResult = parseInt(result[result.length - 1]);
+    // Check if there's a result
+    if (currentResult === null) {
+        alert("Admin has not published the result yet.");
+        return;
+    }
+
+    // Get the single digit result (sum of digits of the 3-digit result)
+    let singleDigitResult = getSingleDigitResult(currentResult);
 
     // Payout for single number bet
     if (betNumber === singleDigitResult) {
-        document.getElementById("result").textContent = `You win! The result is ${result}. You win ₹90.`;
+        document.getElementById("result").textContent = `You win! The result is ${currentResult}. You win ₹90.`;
     } else {
-        document.getElementById("result").textContent = `You lose. The result is ${result}.`;
+        document.getElementById("result").textContent = `You lose. The result is ${currentResult}.`;
     }
 
     // Add result to history
-    betHistory.push(result);
+    betHistory.push(currentResult);
     updateHistory();
 }
 
@@ -36,48 +38,55 @@ function placePattiBet() {
         return;
     }
 
-    // Generate the result number (3-digit random for now)
-    let result = generateResult();
-    
-    // Sort the result and patti in ascending order
-    let sortedResult = result.split('').sort().join('');
+    // Check if the Patti number is in ascending order
     let sortedPatti = pattiNumber.split('').sort().join('');
-
-    // Payout for Patti bet
-    if (sortedPatti === sortedResult) {
-        document.getElementById("result").textContent = `You win! The Patti is ${result}. You win ₹1300.`;
-    } else {
-        document.getElementById("result").textContent = `You lose. The Patti is ${result}.`;
-    }
-
-    // Add result to history
-    betHistory.push(result);
-    updateHistory();
-}
-
-function placeRoundBet() {
-    let roundNumber = parseInt(document.getElementById("roundNumber").value);
-    if (isNaN(roundNumber) || roundNumber < 1 || roundNumber > 8) {
-        alert("Please enter a valid round number (1-8).");
+    if (sortedPatti !== pattiNumber) {
+        alert("Patti must be in ascending order (e.g., 123, 234).");
         return;
     }
 
-    // Check if the round number is correct
-    if (roundNumber === roundCount) {
-        document.getElementById("result").textContent = `You win! You guessed the round correctly. You win ₹800.`;
+    // Check if there's a result
+    if (currentResult === null) {
+        alert("Admin has not published the result yet.");
+        return;
+    }
+
+    // Payout for Patti bet
+    if (sortedPatti === currentResult) {
+        document.getElementById("result").textContent = `You win! The Patti is ${currentResult}. You win ₹1300.`;
     } else {
-        document.getElementById("result").textContent = `You lose. The correct round was ${roundCount}.`;
+        document.getElementById("result").textContent = `You lose. The Patti is ${currentResult}.`;
     }
 
     // Add result to history
-    betHistory.push(roundCount);
+    betHistory.push(currentResult);
     updateHistory();
 }
 
-function generateResult() {
-    // Generate a random 3-digit result between 100 and 999
-    let result = Math.floor(Math.random() * 900) + 100;
-    return result.toString();
+function publishResult() {
+    // Get the 3-digit result from admin input
+    let result = document.getElementById("adminResult").value;
+    if (isNaN(result) || result.length !== 3 || result < 100 || result > 999) {
+        alert("Please enter a valid 3-digit result.");
+        return;
+    }
+
+    // Check if the result is in ascending order
+    let sortedResult = result.split('').sort().join('');
+    if (sortedResult !== result) {
+        alert("The result must be in ascending order.");
+        return;
+    }
+
+    // Set the result and display it
+    currentResult = result;
+    document.getElementById("result").textContent = `The result is ${result}.`;
+}
+
+function getSingleDigitResult(result) {
+    // Calculate the sum of the digits and then reduce to a single digit
+    let sum = result.split('').reduce((acc, digit) => acc + parseInt(digit), 0);
+    return sum % 10; // Get the last digit of the sum
 }
 
 function updateHistory() {
@@ -89,11 +98,4 @@ function updateHistory() {
         listItem.textContent = `Result: ${result}`;
         historyList.appendChild(listItem);
     });
-}
-
-// Function to handle round tracking
-function nextRound() {
-    roundCount++;
-    if (roundCount > 8) roundCount = 1; // Reset to round 1 after 8 rounds
-    console.log(`Next round is: ${roundCount}`);
 }
