@@ -1,15 +1,15 @@
 /* General Styles */
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f7f7f7; /* Light gray background */
-    color: #333; /* Dark gray text for good readability */
+    background-color: #d3d3d3; /* Light grey background */
+    color: white; /* White text for good contrast */
     margin: 0;
     padding: 0;
 }
 
 header {
     background-color: #2D2D2D; /* Darker gray header */
-    color: #fff; /* White text */
+    color: white; /* White text */
     padding: 20px;
     text-align: center;
 }
