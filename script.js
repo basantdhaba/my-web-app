@@ -50,3 +50,8 @@ async function getLatestResult() {
 }
 
 setInterval(getLatestResult, 5000); // Update every 5 seconds
+async function fetchWalletBalance() {
+    let res = await fetch("/wallet");
+    let data = await res.json();
+    document.getElementById("walletBalance").innerText = data.balance;
+}
