@@ -1,11 +1,31 @@
-let betHistory = []; // Store bet history for display
+let selectedNumbers = []; // Store selected numbers
+let betAmount = 0; // Store the bet amount
 let currentResult = null; // Store current result (admin input)
 
+function selectNumber(number) {
+    // Toggle selection of number
+    if (selectedNumbers.includes(number)) {
+        selectedNumbers = selectedNumbers.filter(num => num !== number);
+    } else {
+        selectedNumbers.push(number);
+    }
+
+    // Update the displayed selected numbers
+    document.getElementById("selectedNumbersBox").textContent = selectedNumbers.join(", ");
+}
+
 function placeSingleBet() {
-    // Get the bet number from the input field
-    let betNumber = parseInt(document.getElementById("betNumber").value);
-    if (isNaN(betNumber) || betNumber < 0 || betNumber > 9) {
-        alert("Please enter a valid single number (0-9).");
+    // Get the bet amount from input field
+    betAmount = parseInt(document.getElementById("betAmount").value);
+
+    if (isNaN(betAmount) || betAmount < 10) {
+        alert("Please enter a valid bet amount of ₹10 or greater.");
+        return;
+    }
+
+    // Check if there are selected numbers
+    if (selectedNumbers.length === 0) {
+        alert("Please select at least one number.");
         return;
     }
 
@@ -18,44 +38,14 @@ function placeSingleBet() {
     // Get the single digit result (sum of digits of the 3-digit result)
     let singleDigitResult = getSingleDigitResult(currentResult);
 
-    // Payout for single number bet
-    if (betNumber === singleDigitResult) {
-        document.getElementById("result").textContent = `You win! The result is ${currentResult}. You win ₹90.`;
+    // Check if any selected number matches the result
+    let matchedNumbers = selectedNumbers.filter(num => num === singleDigitResult);
+
+    if (matchedNumbers.length > 0) {
+        let totalWinnings = matchedNumbers.length * 90; // ₹90 for each matched number
+        document.getElementById("result").textContent = `You win ₹${totalWinnings}! The result is ${currentResult}.`;
     } else {
         document.getElementById("result").textContent = `You lose. The result is ${currentResult}.`;
-    }
-
-    // Add result to history
-    betHistory.push(currentResult);
-    updateHistory();
-}
-
-function placePattiBet() {
-    // Get the patti bet (3-digit number)
-    let pattiNumber = document.getElementById("pattiNumber").value;
-    if (isNaN(pattiNumber) || pattiNumber.length !== 3 || pattiNumber < 100 || pattiNumber > 999) {
-        alert("Please enter a valid 3-digit Patti number.");
-        return;
-    }
-
-    // Check if the Patti number is in ascending order
-    let sortedPatti = pattiNumber.split('').sort().join('');
-    if (sortedPatti !== pattiNumber) {
-        alert("Patti must be in ascending order (e.g., 123, 234).");
-        return;
-    }
-
-    // Check if there's a result
-    if (currentResult === null) {
-        alert("Admin has not published the result yet.");
-        return;
-    }
-
-    // Payout for Patti bet
-    if (sortedPatti === currentResult) {
-        document.getElementById("result").textContent = `You win! The Patti is ${currentResult}. You win ₹1300.`;
-    } else {
-        document.getElementById("result").textContent = `You lose. The Patti is ${currentResult}.`;
     }
 
     // Add result to history
