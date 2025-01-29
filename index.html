@@ -3,66 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Satta Matka Game</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Satta Matka - Login</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <header>
-        <h1>Satta Matka Game</h1>
-    </header>
-
-    <main>
-        <h2>Place Your Single Number Bet</h2>
-
-        <!-- Number Selection Grid -->
-        <div class="number-grid">
-            <button class="number-btn" onclick="selectNumber(0)">0</button>
-            <button class="number-btn" onclick="selectNumber(1)">1</button>
-            <button class="number-btn" onclick="selectNumber(2)">2</button>
-            <button class="number-btn" onclick="selectNumber(3)">3</button>
-            <button class="number-btn" onclick="selectNumber(4)">4</button>
-            <button class="number-btn" onclick="selectNumber(5)">5</button>
-            <button class="number-btn" onclick="selectNumber(6)">6</button>
-            <button class="number-btn" onclick="selectNumber(7)">7</button>
-            <button class="number-btn" onclick="selectNumber(8)">8</button>
-            <button class="number-btn" onclick="selectNumber(9)">9</button>
-        </div>
-
-        <!-- Selected Numbers and Bet Amount -->
-        <div class="bet-container">
-            <h3>Selected Numbers:</h3>
-            <div id="selectedNumbersBox"></div>
-            <h3>Enter Bet Amount (₹10 or greater):</h3>
-            <input type="number" id="betAmount" placeholder="Amount" min="10" step="10">
-            <button onclick="placeSingleBet()">Place Bet</button>
-        </div>
-
-        <!-- Admin Result Input -->
-        <div class="admin-container">
-            <h3>Admin: Enter the Result</h3>
-            <label for="adminResult">Enter the 3-digit result (ascending order):</label>
-            <input type="number" id="adminResult" placeholder="e.g., 123" min="100" max="999">
-            <button onclick="publishResult()">Publish Result</button>
-        </div>
-
-        <!-- Display Result -->
-        <div class="result-container">
-            <h3>Result:</h3>
-            <p id="result">--</p>
-        </div>
-
-        <!-- History of results -->
-        <div class="history-container">
-            <h3>Recent Results</h3>
-            <ul id="history"></ul>
-        </div>
-    </main>
-
-    <footer>
-        <p>&copy; 2025 Satta Matka Game</p>
-    </footer>
-
+    <div class="container">
+        <h2>Login or Signup</h2>
+        <input type="text" id="username" placeholder="Enter Username">
+        <button onclick="login()">Login / Signup</button>
+        <p id="wallet"></p>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
