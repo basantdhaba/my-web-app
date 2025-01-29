@@ -1,4 +1,4 @@
-/* styles.css */
+/* General Styles */
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
@@ -25,6 +25,7 @@ button {
     padding: 10px 20px;
     border: none;
     cursor: pointer;
+    font-size: 1rem;
 }
 
 button:hover {
@@ -36,4 +37,50 @@ footer {
     background-color: #333;
     color: white;
     padding: 10px;
+}
+
+/* Responsive Layouts */
+
+/* For small screens (phones) */
+@media screen and (max-width: 600px) {
+    header {
+        padding: 15px;
+    }
+
+    main {
+        padding: 10px;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px 0;
+        font-size: 1.2rem;
+    }
+
+    footer {
+        padding: 8px;
+    }
+}
+
+/* For medium screens (tablets) */
+@media screen and (max-width: 1024px) {
+    header {
+        padding: 18px;
+    }
+
+    button {
+        width: 50%;
+        padding: 12px;
+    }
+}
+
+/* For large screens (desktops) */
+@media screen and (min-width: 1025px) {
+    header {
+        padding: 20px;
+    }
+
+    button {
+        padding: 14px 30px;
+    }
 }
