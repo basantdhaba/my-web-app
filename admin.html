@@ -3,47 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Set Result</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Admin Panel - Satta Matka</title>
+    <style>
+        body { background-color: #222; color: white; text-align: center; font-family: Arial, sans-serif; }
+        table { width: 80%; margin: auto; border-collapse: collapse; }
+        th, td { border: 1px solid white; padding: 10px; text-align: center; }
+        input { padding: 10px; width: 100px; }
+        button { padding: 10px 20px; cursor: pointer; }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Admin Panel - Publish Result</h2>
-        <label>Select Game Round:</label>
-        <select id="gameRound">
-            <option value="1st">1st Bazi</option>
-            <option value="2nd">2nd Bazi</option>
-            <option value="3rd">3rd Bazi</option>
-            <option value="4th">4th Bazi</option>
-            <option value="5th">5th Bazi</option>
-            <option value="6th">6th Bazi</option>
-            <option value="7th">7th Bazi</option>
-            <option value="8th">8th Bazi</option>
-        </select>
+    <h1>Admin Panel - Satta Matka</h1>
+    
+    <h2>Update Game Results</h2>
+    <label>Enter 3-Digit Result:</label>
+    <input type="text" id="threeDigitResult" maxlength="3">
+    <button onclick="submitResult()">Submit Result</button>
 
-        <input type="number" id="threeDigitResult" placeholder="Enter 3-digit result">
-        <button onclick="submitResult()">Publish Result</button>
-        <p id="resultMessage"></p>
-    </div>
+    <h2>All Bets</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Game Round</th>
+                <th>Bet Type</th>
+                <th>Number</th>
+                <th>Amount</th>
+                <th>Result</th>
+            </tr>
+        </thead>
+        <tbody id="betsTableBody"></tbody>
+    </table>
 
     <script>
+        async function fetchBets() {
+            let res = await fetch("/all-bets");
+            let data = await res.json();
+
+            let tableBody = document.getElementById("betsTableBody");
+            tableBody.innerHTML = "";
+
+            data.bets.forEach(bet => {
+                let row = `<tr>
+                    <td>${bet.username}</td>
+                    <td>${bet.round}</td>
+                    <td>${bet.type}</td>
+                    <td>${bet.number}</td>
+                    <td>₹${bet.amount}</td>
+                    <td>${bet.result ? bet.result : "Pending"}</td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+        }
+
         async function submitResult() {
-            let gameRound = document.getElementById("gameRound").value;
-            let threeDigitResult = document.getElementById("threeDigitResult").value;
+            let threeDigitNumber = document.getElementById("threeDigitResult").value;
+            if (!/^\d{3}$/.test(threeDigitNumber)) return alert("Enter a valid 3-digit number!");
 
-            if (threeDigitResult.length !== 3) {
-                return alert("Enter a valid 3-digit result.");
-            }
-
-            let res = await fetch("/publish-result", {
+            let res = await fetch("/update-result", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ gameRound, threeDigitResult }),
+                body: JSON.stringify({ threeDigitNumber })
             });
 
             let data = await res.json();
-            document.getElementById("resultMessage").innerText = data.message;
+            alert(data.message);
+            fetchBets();
         }
+
+        fetchBets();
     </script>
 </body>
 </html>
