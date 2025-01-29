@@ -15,11 +15,25 @@
     <main>
         <h2>Place Your Bet</h2>
 
-        <!-- Input for placing bet -->
+        <!-- Input for placing single number bet -->
         <div class="bet-container">
-            <label for="betNumber">Enter your 3-Digit Number:</label>
-            <input type="number" id="betNumber" placeholder="e.g., 123" min="0" max="999">
-            <button onclick="placeBet()">Place Bet</button>
+            <label for="betNumber">Enter your single number bet (1-9):</label>
+            <input type="number" id="betNumber" placeholder="e.g., 6" min="1" max="9">
+            <button onclick="placeSingleBet()">Place Single Number Bet</button>
+        </div>
+
+        <!-- Input for placing Patti (3-digit number) bet -->
+        <div class="bet-container">
+            <label for="pattiNumber">Enter your Patti (3-digit number):</label>
+            <input type="number" id="pattiNumber" placeholder="e.g., 123" min="100" max="999">
+            <button onclick="placePattiBet()">Place Patti Bet</button>
+        </div>
+
+        <!-- Input for placing round bet -->
+        <div class="bet-container">
+            <label for="roundNumber">Enter your round number guess (1-8):</label>
+            <input type="number" id="roundNumber" placeholder="e.g., 1" min="1" max="8">
+            <button onclick="placeRoundBet()">Place Round Bet</button>
         </div>
 
         <!-- Result section -->
