@@ -1,97 +1,23 @@
-<h1>Hello, Web!</h1>
-GNU nano 8.3          index.html          Modified
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width>
-    <title>Kolkata Fatafat Game</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Web App</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        <h1>Welcome to Kolkata Fatafat Game</h1>
+        <h1>Welcome to My Web Application</h1>
     </header>
-
-    <section id="game-info">
-        <h2 id="game-name">Game Name: Fatafat</h2>
-        <div id="result">
-            <p>Result will be displayed here.</p>
-        </div>
-        <button id="generate-result">Generate Result<>
-    </section>
-
-<footer>
-        <p>&copy; 2025 Kolkata Fatafat Game</p>
+    <main>
+        <p>This is a simple web app. You can upload this to GitHub and deploy it on Vercel.</p>
+        <button id="clickButton">Click Me</button>
+    </main>
+    <footer>
+        <p>&copy; 2025 My Web App</p>
     </footer>
-
-    <script src="script.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
-/* Reset and basic styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-/* Body */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
-    text-align: center;
-}
-/* Header */
-header {
-    background-color: #4CAF50;
-    color: white;
-    padding: 20px;
-    text-align: center;
-}
-
-/* Game Section */
-#game-info {
-    margin: 40px;
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-#game-name {
-    font-size: 24px;
-    margin-bottom: 20px;
-}
-
-/* Result Box */
-#result {
-    font-size: 40px;
-    font-weight: bold;
-    color: #4CAF50;
-    margin: 20px 0;
-    padding: 20px;
-    background-color: #e8f5e9;
-    border-radius: 10px;
-    display: inline-block;
-}
-
-/* Button Styling */
-button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 18px;
-}
-
-button:hover {
-    background-color: #45a049;
-}
-document.getElementById('generate-result').addEventLi>
-    // Generate a random number for the result
-    const result = Math.floor(Math.random() * 1000); >
-
-// Update the result section
-    document.getElementById('result').innerHTML = `Re>
