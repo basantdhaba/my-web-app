@@ -9,6 +9,19 @@ app.use(express.static("public"));
 let users = JSON.parse(fs.readFileSync("database.json", "utf-8"));
 let bettingHistory = JSON.parse(fs.readFileSync("bets.json", "utf-8"));
 
+const adminUsername = "admin";
+const adminPassword = "admin123";
+
+// **Admin Authentication**
+function authenticateAdmin(req, res, next) {
+    let { username, password } = req.body;
+    if (username === adminUsername && password === adminPassword) {
+        return next();
+    } else {
+        res.status(403).json({ message: "Invalid admin credentials!" });
+    }
+}
+
 // **User Registration**
 app.post("/register", (req, res) => {
     let { username, password } = req.body;
@@ -57,13 +70,13 @@ app.post("/place-bet", (req, res) => {
     res.json({ message: "Bet placed successfully!" });
 });
 
-// **Fetch All Bets for Admin**
-app.get("/all-bets", (req, res) => {
+// **Fetch All Bets for Admin (Requires Authentication)**
+app.post("/all-bets", authenticateAdmin, (req, res) => {
     res.json({ bets: bettingHistory });
 });
 
 // **Admin Updates Result**
-app.post("/update-result", (req, res) => {
+app.post("/update-result", authenticateAdmin, (req, res) => {
     let { threeDigitNumber } = req.body;
     if (!/^\d{3}$/.test(threeDigitNumber)) return res.json({ message: "Invalid 3-digit number!" });
 
