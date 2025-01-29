@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallet Recharge</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Recharge Wallet</h2>
+        <p>Your Wallet Balance: ₹<span id="walletBalance">0</span></p>
+
+        <input type="number" id="rechargeAmount" placeholder="Enter Amount (Min ₹50)">
+        <button onclick="generateQRCode()">Generate QR Code</button>
+
+        <div id="qrContainer"></div>
+        <p>After payment, send transaction ID to Admin for approval.</p>
+    </div>
+
+    <script>
+        async function fetchWalletBalance() {
+            let res = await fetch("/wallet");
+            let data = await res.json();
+            document.getElementById("walletBalance").innerText = data.balance;
+        }
+
+        function generateQRCode() {
+            let amount = document.getElementById("rechargeAmount").value;
+            if (amount < 50) return alert("Minimum recharge amount is ₹50");
+
+            let upiID = "yourupi@upi"; // Replace with your UPI ID
+            let qrURL = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=${upiID}&pn=Recharge&mc=&tid=&tr=${amount}&tn=Satta Matka Wallet Recharge&am=${amount}&cu=INR`;
+
+            document.getElementById("qrContainer").innerHTML = `<img src="${qrURL}" alt="UPI QR Code"><p>UPI ID: ${upiID}</p>`;
+        }
+
+        fetchWalletBalance();
+    </script>
+</body>
+</html>
