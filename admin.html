@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Set Result</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Admin Panel - Publish Result</h2>
+        <label>Select Game Round:</label>
+        <select id="gameRound">
+            <option value="1st">1st Bazi</option>
+            <option value="2nd">2nd Bazi</option>
+            <option value="3rd">3rd Bazi</option>
+            <option value="4th">4th Bazi</option>
+            <option value="5th">5th Bazi</option>
+            <option value="6th">6th Bazi</option>
+            <option value="7th">7th Bazi</option>
+            <option value="8th">8th Bazi</option>
+        </select>
+
+        <input type="number" id="threeDigitResult" placeholder="Enter 3-digit result">
+        <button onclick="submitResult()">Publish Result</button>
+        <p id="resultMessage"></p>
+    </div>
+
+    <script>
+        async function submitResult() {
+            let gameRound = document.getElementById("gameRound").value;
+            let threeDigitResult = document.getElementById("threeDigitResult").value;
+
+            if (threeDigitResult.length !== 3) {
+                return alert("Enter a valid 3-digit result.");
+            }
+
+            let res = await fetch("/publish-result", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ gameRound, threeDigitResult }),
+            });
+
+            let data = await res.json();
+            document.getElementById("resultMessage").innerText = data.message;
+        }
+    </script>
+</body>
+</html>
