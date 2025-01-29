@@ -43,3 +43,10 @@ async function placeBet() {
     selectedNumbers = [];
     document.getElementById("selectedNumbers").innerText = "";
 }
+async function getLatestResult() {
+    let res = await fetch("/latest-result");
+    let data = await res.json();
+    document.getElementById("latestResult").innerText = `Latest Result: ${data.threeDigit} (Single: ${data.singleDigit})`;
+}
+
+setInterval(getLatestResult, 5000); // Update every 5 seconds
