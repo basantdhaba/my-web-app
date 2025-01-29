@@ -13,20 +13,29 @@
     </header>
 
     <main>
-        <h2>Place Your Bet</h2>
+        <h2>Place Your Single Number Bet</h2>
 
-        <!-- Input for placing single number bet -->
-        <div class="bet-container">
-            <label for="betNumber">Enter your single number bet (0-9):</label>
-            <input type="number" id="betNumber" placeholder="e.g., 6" min="0" max="9">
-            <button onclick="placeSingleBet()">Place Single Number Bet</button>
+        <!-- Number Selection Grid -->
+        <div class="number-grid">
+            <button class="number-btn" onclick="selectNumber(0)">0</button>
+            <button class="number-btn" onclick="selectNumber(1)">1</button>
+            <button class="number-btn" onclick="selectNumber(2)">2</button>
+            <button class="number-btn" onclick="selectNumber(3)">3</button>
+            <button class="number-btn" onclick="selectNumber(4)">4</button>
+            <button class="number-btn" onclick="selectNumber(5)">5</button>
+            <button class="number-btn" onclick="selectNumber(6)">6</button>
+            <button class="number-btn" onclick="selectNumber(7)">7</button>
+            <button class="number-btn" onclick="selectNumber(8)">8</button>
+            <button class="number-btn" onclick="selectNumber(9)">9</button>
         </div>
 
-        <!-- Input for placing Patti (3-digit number) bet -->
+        <!-- Selected Numbers and Bet Amount -->
         <div class="bet-container">
-            <label for="pattiNumber">Enter your Patti (3-digit number):</label>
-            <input type="number" id="pattiNumber" placeholder="e.g., 123" min="100" max="999">
-            <button onclick="placePattiBet()">Place Patti Bet</button>
+            <h3>Selected Numbers:</h3>
+            <div id="selectedNumbersBox"></div>
+            <h3>Enter Bet Amount (₹10 or greater):</h3>
+            <input type="number" id="betAmount" placeholder="Amount" min="10" step="10">
+            <button onclick="placeSingleBet()">Place Bet</button>
         </div>
 
         <!-- Admin Result Input -->
