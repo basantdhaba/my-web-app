@@ -38,18 +38,6 @@ app.get("/wallet", (req, res) => {
     res.json({ balance: users[username].wallet });
 });
 
-// **Admin Approves Payment**
-app.post("/approve-payment", (req, res) => {
-    let { username, amount } = req.body;
-
-    if (!users[username]) return res.json({ message: "User not found" });
-
-    users[username].wallet += amount;
-    fs.writeFileSync("database.json", JSON.stringify(users, null, 2));
-
-    res.json({ message: `Wallet updated for ${username}!` });
-});
-
 // **User Places a Bet**
 app.post("/place-bet", (req, res) => {
     let { username, type, number, amount } = req.body;
@@ -67,6 +55,40 @@ app.post("/place-bet", (req, res) => {
     fs.writeFileSync("bets.json", JSON.stringify(bettingHistory, null, 2));
 
     res.json({ message: "Bet placed successfully!" });
+});
+
+// **Fetch All Bets for Admin**
+app.get("/all-bets", (req, res) => {
+    res.json({ bets: bettingHistory });
+});
+
+// **Admin Updates Result**
+app.post("/update-result", (req, res) => {
+    let { threeDigitNumber } = req.body;
+    if (!/^\d{3}$/.test(threeDigitNumber)) return res.json({ message: "Invalid 3-digit number!" });
+
+    // **Calculate single-digit result**
+    let digits = threeDigitNumber.split("").map(Number);
+    let singleDigitResult = (digits[0] + digits[1] + digits[2]) % 10;
+
+    // **Update bets & distribute winnings**
+    bettingHistory.forEach(bet => {
+        if (!bet.result) {
+            bet.result = singleDigitResult;
+            
+            if (bet.type === "single" && bet.number == singleDigitResult) {
+                users[bet.username].wallet += bet.amount * 9;
+            } else if (bet.type === "patti" && bet.number == threeDigitNumber) {
+                users[bet.username].wallet += bet.amount * 130;
+            }
+        }
+    });
+
+    // **Save data**
+    fs.writeFileSync("bets.json", JSON.stringify(bettingHistory, null, 2));
+    fs.writeFileSync("database.json", JSON.stringify(users, null, 2));
+
+    res.json({ message: "Result updated successfully!" });
 });
 
 // **Fetch Betting History**
