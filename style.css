@@ -17,12 +17,40 @@ main {
     margin: 20px;
 }
 
-.bet-container, .admin-container, .result-container {
+h2, h3 {
+    color: #333;
+}
+
+.number-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
     margin-bottom: 20px;
 }
 
-h2, h3 {
-    color: #333;
+.number-btn {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.number-btn:hover {
+    background-color: #45a049;
+}
+
+.bet-container {
+    margin-bottom: 20px;
+}
+
+#selectedNumbersBox {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #ddd;
+    border-radius: 4px;
 }
 
 input[type="number"] {
