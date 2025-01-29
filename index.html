@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Satta Matka - Login</title>
+    <title>Satta Matka - Play</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,6 +13,28 @@
         <button onclick="login()">Login / Signup</button>
         <p id="wallet"></p>
     </div>
+
+    <div class="container">
+        <h2>Place Your Bet</h2>
+        <div class="number-grid">
+            <!-- Number buttons 0-9 -->
+            <button onclick="selectNumber(0)">0</button>
+            <button onclick="selectNumber(1)">1</button>
+            <button onclick="selectNumber(2)">2</button>
+            <button onclick="selectNumber(3)">3</button>
+            <button onclick="selectNumber(4)">4</button>
+            <button onclick="selectNumber(5)">5</button>
+            <button onclick="selectNumber(6)">6</button>
+            <button onclick="selectNumber(7)">7</button>
+            <button onclick="selectNumber(8)">8</button>
+            <button onclick="selectNumber(9)">9</button>
+        </div>
+
+        <p>Selected Numbers: <span id="selectedNumbers"></span></p>
+        <input type="number" id="betAmount" placeholder="Enter Bet Amount (Min ₹10)" min="10">
+        <button onclick="placeBet()">Place Bet</button>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
