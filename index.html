@@ -49,6 +49,27 @@
       background-color: #0056b3;
     }
 
+    .box-container {
+      display: flex;
+      justify-content: space-evenly;
+      margin-top: 10px;
+      text-align: center;
+      background-color: #f8f9fa;
+      padding: 10px 0;
+      position: sticky;
+      top: 60px;
+      z-index: 999;
+    }
+
+    .box {
+      background-color: #e0f7fa;
+      padding: 15px 20px;
+      border-radius: 5px;
+      width: 30%;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+
     .game-table {
       width: 100%;
       max-width: 1000px;
@@ -107,30 +128,6 @@
       margin-top: 8px;
     }
 
-    #loginSection {
-      margin-top: 10px;
-      padding: 10px;
-      background-color: #f9f9f9;
-      width: 300px;
-      border: 1px solid #ddd;
-      display: none;
-    }
-
-    #boxContainer {
-      display: none;
-      margin-top: 10px;
-      display: flex;
-      justify-content: space-evenly;
-      text-align: center;
-    }
-
-    .box {
-      background-color: #f0f0f0;
-      padding: 20px;
-      border-radius: 5px;
-      width: 30%;
-    }
-
     /* Responsive Design */
     @media (max-width: 768px) {
       .date {
@@ -140,6 +137,10 @@
       .bazi-box {
         font-size: 1.2em;
         height: 70px;
+      }
+
+      .box {
+        width: 28%;
       }
     }
 
@@ -157,6 +158,11 @@
         font-size: 1em;
         height: 60px;
       }
+
+      .box {
+        width: 30%;
+        font-size: 1em;
+      }
     }
   </style>
 </head>
@@ -173,26 +179,19 @@
     <button id="playButton">Play</button>
   </div>
 
-  <div id="loginSection">
-    <h3>Login or Register</h3>
-    <input type="email" id="email" placeholder="Enter your email" required style="width: 90%; padding: 8px; margin: 5px 0;">
-    <input type="password" id="password" placeholder="Enter your password" required style="width: 90%; padding: 8px; margin: 5px 0;">
-    <button id="loginSubmitButton" style="padding: 8px 16px; background-color: #28a745; color: white; border: none;">Submit</button>
+  <div class="box-container">
+    <div class="box" style="background-color: #e0f7fa;">
+      Single
+    </div>
+    <div class="box" style="background-color: #ffe0b2;">
+      Patti
+    </div>
+    <div class="box" style="background-color: #c8e6c9;">
+      Juri
+    </div>
   </div>
 
   <div class="game-table" id="gameTable"></div>
-
-  <div id="boxContainer">
-    <div class="box" style="background-color: #e0f7fa;">
-      <h3>Single</h3>
-    </div>
-    <div class="box" style="background-color: #ffe0b2;">
-      <h3>Patti</h3>
-    </div>
-    <div class="box" style="background-color: #c8e6c9;">
-      <h3>Juri</h3>
-    </div>
-  </div>
 
   <script>
     const gameData = {
@@ -251,10 +250,6 @@
 
     const gameTable = document.getElementById('gameTable');
     const gameSelector = document.getElementById('gameSelector');
-    const playButton = document.getElementById('playButton');
-    const loginSection = document.getElementById('loginSection');
-    const loginSubmitButton = document.getElementById('loginSubmitButton');
-    const boxContainer = document.getElementById('boxContainer');
 
     function populateTable(selectedGame) {
       gameTable.innerHTML = '';
@@ -266,23 +261,6 @@
 
     gameSelector.addEventListener('change', () => {
       populateTable(gameSelector.value);
-    });
-
-    playButton.addEventListener('click', () => {
-      loginSection.style.display = 'block';
-    });
-
-    loginSubmitButton.addEventListener('click', () => {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-
-      if (email === 'test@demo.com' && password === '12345') {
-        alert('Login successful!');
-        loginSection.style.display = 'none';
-        boxContainer.style.display = 'flex';
-      } else {
-        alert('Invalid login credentials!');
-      }
     });
 
     // Populate initial game table
