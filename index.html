@@ -7,223 +7,112 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f9f9f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: #f0f0f0;
       margin: 0;
     }
 
-    h1 {
+    .game-container {
       text-align: center;
-      font-size: 2em;
-      padding: 10px;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     }
 
-    .header {
-      position: sticky;
-      top: 0;
-      background: #fff;
-      z-index: 1000;
-      padding: 10px 0;
-      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
+    .play-section {
+      margin: 20px 0;
     }
 
-    select {
-      padding: 10px;
-      font-size: 1.2em;
-    }
-
-    button {
-      padding: 10px 15px;
-      font-size: 1.2em;
-      cursor: pointer;
-      background-color: #007bff;
+    .play-button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
       color: white;
       border: none;
-      border-radius: 4px;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-    }
-
-    .game-table {
-      width: 100%;
-      max-width: 1000px;
-      margin: 20px auto;
-      background: #ffffff;
-      padding: 10px;
-    }
-
-    .row {
-      display: flex;
-      border-bottom: 1px solid #ddd;
-      padding: 8px 0;
-      align-items: center;
-    }
-
-    .date {
-      width: 80px;
-      text-align: center;
-      font-weight: bold;
-      background-color: #f0f0f0;
-      padding: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .bazi-results {
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-    }
-
-    .bazi-box {
-      flex: 1;
-      height: 80px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background-color: #e0e7ff;
-      margin: 5px;
-      font-size: 1.5em;
-      font-weight: bold;
       border-radius: 5px;
-      position: relative;
-      text-align: center;
+      cursor: pointer;
     }
 
-    .bazi-number {
-      font-size: 1.5em;
+    .play-button:hover {
+      background-color: #45a049;
     }
 
-    .sum-digit {
-      font-size: 1.5em;
-      color: #333;
-      margin-top: 8px;
+    .dropdown {
+      margin-top: 10px;
     }
 
-    /* Responsive Design */
-    @media (max-width: 768px) {
-      .date {
-        font-size: 0.9em;
-      }
-
-      .bazi-box {
-        font-size: 1.2em;
-        height: 70px;
-      }
+    .auth-form {
+      margin: 20px 0;
     }
 
-    @media (max-width: 480px) {
-      h1 {
-        font-size: 1.2em;
-      }
+    .auth-form input {
+      padding: 8px;
+      margin: 5px;
+      width: 200px;
+      display: block;
+    }
 
-      .date {
-        width: 60px;
-        font-size: 0.75em;
-      }
+    .number-box-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
 
-      .bazi-box {
-        font-size: 1em;
-        height: 60px;
-      }
+    .number-box {
+      width: 40px;
+      height: 40px;
+      background-color: #007bff;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 5px;
+      margin: 5px;
+      cursor: pointer;
+    }
+
+    .number-box:hover {
+      background-color: #0056b3;
     }
   </style>
 </head>
 <body>
+  <div class="game-container">
+    <h1>Game Table Version 3.0</h1>
 
-  <h1>Game Table Version 3.0</h1>
-  
-  <div class="header">
-    <select id="gameSelector">
-      <option value="kolkataFatafat">Kolkata Fatafat</option>
-      <option value="mainBazar">Main Bazar</option>
-      <option value="gmMatka">GM Matka</option>
-    </select>
-    <button id="playButton">Play</button>
+    <div class="play-section">
+      <button class="play-button">Play</button>
+
+      <select class="dropdown">
+        <option value="single">Single</option>
+        <option value="multi">Multi</option>
+      </select>
+    </div>
+
+    <div class="auth-form">
+      <h3>Login/Register</h3>
+      <input type="text" placeholder="Username">
+      <input type="password" placeholder="Password">
+      <button class="play-button">Submit</button>
+    </div>
+
+    <div class="number-box-container">
+      <!-- Number boxes 0 to 9 -->
+      <div class="number-box">0</div>
+      <div class="number-box">1</div>
+      <div class="number-box">2</div>
+      <div class="number-box">3</div>
+      <div class="number-box">4</div>
+      <div class="number-box">5</div>
+      <div class="number-box">6</div>
+      <div class="number-box">7</div>
+      <div class="number-box">8</div>
+      <div class="number-box">9</div>
+    </div>
   </div>
-
-  <div class="game-table" id="gameTable"></div>
-
-  <script>
-    const gameData = {
-      "kolkataFatafat": [
-        { date: 'Wed 15/01', values: [469, 138, 678, 577, 290, 880, 458, 236] },
-        { date: 'Thu 16/01', values: [460, 790, 789, 239, 345, 290, 680, 899] }
-      ],
-      "mainBazar": [
-        { date: 'Fri 17/01', values: [340, 447, 167, 670, 237, 468, 770, 378] },
-        { date: 'Sat 18/01', values: [480, 159, 399, 358, 140, 460, 289, 889] }
-      ],
-      "gmMatka": [
-        { date: 'Sun 19/01', values: [256, 135, 459, 344, 100, 200, 345, 456] },
-        { date: 'Mon 20/01', values: [138, 349, 160, 269, 100, 380, 368, 560] }
-      ]
-    };
-
-    function calculateSumOfDigits(number) {
-      const digits = number.toString().split('').map(Number);
-      return digits.reduce((acc, digit) => acc + digit, 0) % 10;
-    }
-
-    function createRow(date, values) {
-      const row = document.createElement('div');
-      row.classList.add('row');
-
-      const dateBox = document.createElement('div');
-      dateBox.classList.add('date');
-      dateBox.textContent = date;
-      row.appendChild(dateBox);
-
-      const baziResults = document.createElement('div');
-      baziResults.classList.add('bazi-results');
-
-      values.forEach(value => {
-        const baziBox = document.createElement('div');
-        baziBox.classList.add('bazi-box');
-
-        const numberSpan = document.createElement('div');
-        numberSpan.classList.add('bazi-number');
-        numberSpan.textContent = value;
-
-        const sumDigit = calculateSumOfDigits(value);
-        const sumSpan = document.createElement('div');
-        sumSpan.classList.add('sum-digit');
-        sumSpan.textContent = sumDigit;
-
-        baziBox.appendChild(numberSpan);
-        baziBox.appendChild(sumSpan);
-        baziResults.appendChild(baziBox);
-      });
-
-      row.appendChild(baziResults);
-      return row;
-    }
-
-    const gameTable = document.getElementById('gameTable');
-    const gameSelector = document.getElementById('gameSelector');
-
-    function populateTable(selectedGame) {
-      gameTable.innerHTML = '';
-      gameData[selectedGame].forEach(entry => {
-        const row = createRow(entry.date, entry.values);
-        gameTable.appendChild(row);
-      });
-    }
-
-    gameSelector.addEventListener('change', () => {
-      populateTable(gameSelector.value);
-    });
-
-    // Populate initial game table
-    populateTable(gameSelector.value);
-  </script>
-
 </body>
 </html>
