@@ -61,10 +61,11 @@
     .box-container {
       display: flex;
       flex-direction: column;
-      margin-top: 10px;
-      text-align: center;
+      position: sticky;
+      top: 60px; /* Sticks below the header */
       background-color: #f8f9fa;
       padding: 10px 0;
+      z-index: 999;
       gap: 10px;
     }
 
