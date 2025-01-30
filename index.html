@@ -230,37 +230,4 @@
         numberSpan.textContent = value;
 
         const sumDigit = calculateSumOfDigits(value);
-        const sumSpan = document.createElement('div');
-        sumSpan.classList.add('sum-digit');
-        sumSpan.textContent = sumDigit;
-
-        baziBox.appendChild(numberSpan);
-        baziBox.appendChild(sumSpan);
-        baziResults.appendChild(baziBox);
-      });
-
-      row.appendChild(baziResults);
-      return row;
-    }
-
-    const gameTable = document.getElementById('gameTable');
-    const gameSelector = document.getElementById('gameSelector');
-
-    function populateTable(selectedGame) {
-      gameTable.innerHTML = '';
-      gameData[selectedGame].forEach(entry => {
-        const row = createRow(entry.date, entry.values);
-        gameTable.appendChild(row);
-      });
-    }
-
-    gameSelector.addEventListener('change', () => {
-      populateTable(gameSelector.value);
-    });
-
-    // Populate initial game table
-    populateTable(gameSelector.value);
-  </script>
-
-</body>
-</html>
+        const sumSpan = document.createElement('div
