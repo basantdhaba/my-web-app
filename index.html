@@ -68,13 +68,16 @@
       position: sticky;
       top: 110px;
       z-index: 999;
+      gap: 10px;
+      overflow-x: auto;
     }
 
     .box {
       background-color: #e0f7fa;
       padding: 15px 20px;
       border-radius: 5px;
-      width: 30%;
+      min-width: 100px;
+      text-align: center;
       font-size: 1.2em;
       font-weight: bold;
     }
@@ -87,6 +90,13 @@
       padding: 10px;
     }
 
+    @media (max-width: 768px) {
+      .box {
+        min-width: 80px;
+        padding: 10px;
+        font-size: 1em;
+      }
+    }
   </style>
 </head>
 <body>
@@ -110,15 +120,9 @@
   </div>
 
   <div class="box-container">
-    <div class="box" style="background-color: #e0f7fa;">
-      Single
-    </div>
-    <div class="box" style="background-color: #ffe0b2;">
-      Patti
-    </div>
-    <div class="box" style="background-color: #c8e6c9;">
-      Juri
-    </div>
+    <div class="box" style="background-color: #e0f7fa;">Single</div>
+    <div class="box" style="background-color: #ffe0b2;">Patti</div>
+    <div class="box" style="background-color: #c8e6c9;">Juri</div>
   </div>
 
   <div class="game-table" id="gameTable"></div>
