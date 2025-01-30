@@ -26,13 +26,14 @@
       box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 10px 20px;
+      justify-content: center;
+      gap: 10px;
     }
 
     select {
       padding: 10px;
       font-size: 1.2em;
+      text-align: center;
     }
 
     button {
@@ -50,9 +51,10 @@
       background-color: #0056b3;
     }
 
-    .wallet {
-      font-size: 1.2em;
-      font-weight: bold;
+    .scroll-container {
+      max-height: 400px;
+      overflow-y: auto;
+      margin-top: 10px;
     }
 
     .user-section {
@@ -62,39 +64,18 @@
       text-align: center;
     }
 
-    .number-selection {
-      margin-top: 20px;
-      text-align: center;
-    }
-
-    .number-buttons {
+    .user-section form {
       display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin: 10px 0;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 300px;
+      margin: 0 auto;
     }
 
-    .number-buttons button {
-      margin: 5px;
-      padding: 10px 20px;
-      font-size: 1.2em;
-      background-color: #17a2b8;
-    }
-
-    .number-buttons button:hover {
-      background-color: #138496;
-    }
-
-    #selectedNumbers {
-      margin: 10px;
-      font-size: 1.2em;
-    }
-
-    input[type="number"] {
+    input[type="email"], input[type="password"] {
       padding: 10px;
-      font-size: 1.2em;
-      width: 100px;
-      margin-top: 10px;
+      font-size: 1em;
+      width: 100%;
     }
 
     .action-buttons {
@@ -104,17 +85,21 @@
       margin-top: 20px;
     }
 
-    #totalAmount {
+    .action-buttons button {
+      padding: 15px 30px;
       font-size: 1.2em;
-      margin-top: 10px;
-      font-weight: bold;
+      background-color: #28a745;
+      border-radius: 8px;
+    }
+
+    .action-buttons button:hover {
+      background-color: #218838;
     }
   </style>
 </head>
 <body>
 
   <div class="header">
-    <div class="wallet">Wallet: <span id="walletAmount">1000</span> ₹</div>
     <h1>Game Data Table</h1>
     <select id="gameSelector">
       <option value="kolkataFatafat">Kolkata Fatafat</option>
@@ -125,98 +110,128 @@
   </div>
 
   <div class="user-section" id="userSection">
-    <div id="actionButtons" class="action-buttons">
-      <button id="singleButton">Single</button>
+    <!-- Login/Register Form -->
+    <form id="authForm">
+      <h2>Login or Register</h2>
+      <input type="email" id="email" placeholder="Enter your email" required />
+      <input type="password" id="password" placeholder="Enter your password" required />
+      <button type="button" id="loginRegisterButton">Submit</button>
+    </form>
+
+    <!-- Action Buttons for Registered Users -->
+    <div id="actionButtons" class="action-buttons" style="display: none;">
+      <button>Single</button>
       <button>Patti</button>
       <button>Judi</button>
     </div>
+  </div>
 
-    <!-- Single Play Area -->
-    <div id="singlePlayArea" style="display: none;">
-      <h2>Single Play</h2>
-      <div class="number-selection">
-        <p>Select Numbers:</p>
-        <div class="number-buttons" id="numberButtons"></div>
-        <div id="selectedNumbers">Selected Numbers: None</div>
-        <input type="number" id="betAmount" placeholder="Enter Amount" min="1" />
-        <div id="totalAmount">Total: 0 ₹</div>
-        <button id="submitPlayButton">Play</button>
-      </div>
-    </div>
+  <div class="scroll-container">
+    <table id="dataTable">
+      <caption>Data Table for Selected Game</caption>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>1st Bazi</th>
+          <th>2nd Bazi</th>
+          <th>3rd Bazi</th>
+          <th>4th Bazi</th>
+          <th>5th Bazi</th>
+          <th>6th Bazi</th>
+          <th>7th Bazi</th>
+          <th>8th Bazi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Dynamic Data Rows will go here -->
+      </tbody>
+    </table>
   </div>
 
   <script>
-    let walletAmount = 1000;
-    const walletDisplay = document.getElementById('walletAmount');
-    const singleButton = document.getElementById('singleButton');
-    const singlePlayArea = document.getElementById('singlePlayArea');
-    const numberButtons = document.getElementById('numberButtons');
-    const selectedNumbersDisplay = document.getElementById('selectedNumbers');
-    const betAmountInput = document.getElementById('betAmount');
-    const totalAmountDisplay = document.getElementById('totalAmount');
-    const submitPlayButton = document.getElementById('submitPlayButton');
+    const data = {
+      kolkataFatafat: [
+        { date: 'Wed 15/01', values: [469, 138, 678, 577, 290, 880, 458, 236] },
+        { date: 'Thu 16/01', values: [460, 790, 789, 239, 345, 290, 680, 899] }
+      ],
+      mainBazar: [
+        { date: 'Fri 17/01', values: [340, 447] },
+        { date: 'Sat 18/01', values: [480, 159] }
+      ],
+      gmMatka: [
+        { date: 'Sun 19/01', values: [256, 135, 459, 344, 100, 200, 345, 456] },
+        { date: 'Mon 20/01', values: [138, 349, 160, 269, 100, 380, 368, 560] }
+      ]
+    };
 
-    let selectedNumbers = [];
+    const tableBody = document.querySelector('#dataTable tbody');
+    const gameSelector = document.getElementById('gameSelector');
+    const playButton = document.getElementById('playButton');
+    const userSection = document.getElementById('userSection');
+    const authForm = document.getElementById('authForm');
+    const actionButtons = document.getElementById('actionButtons');
+    const loginRegisterButton = document.getElementById('loginRegisterButton');
 
-    // Generate Number Buttons (0-9)
-    for (let i = 0; i <= 9; i++) {
-      const button = document.createElement('button');
-      button.textContent = i;
-      button.addEventListener('click', () => {
-        selectedNumbers.push(i);
-        updateSelectedNumbersDisplay();
+    function populateTable(gameData) {
+      tableBody.innerHTML = ''; 
+
+      gameData.forEach(row => {
+        const tr = document.createElement('tr');
+        const dateCell = document.createElement('td');
+        dateCell.textContent = row.date;
+        dateCell.classList.add('day');
+        tr.appendChild(dateCell);
+
+        row.values.forEach(value => {
+          const td = document.createElement('td');
+          const boxContent = document.createElement('div');
+          boxContent.classList.add('box-content');
+
+          const originalNumber = document.createElement('div');
+          originalNumber.textContent = value;
+
+          const digits = value.toString().split('').map(Number);
+          const digitSum = digits.reduce((acc, num) => acc + num, 0);
+          const lastDigit = digitSum % 10;
+
+          const sumDigit = document.createElement('div');
+          sumDigit.textContent = lastDigit;
+          sumDigit.classList.add('sum-digit');
+
+          boxContent.appendChild(originalNumber);
+          boxContent.appendChild(sumDigit);
+
+          td.appendChild(boxContent);
+          tr.appendChild(td);
+        });
+
+        tableBody.appendChild(tr);
       });
-      numberButtons.appendChild(button);
     }
 
-    function updateSelectedNumbersDisplay() {
-      selectedNumbersDisplay.textContent =
-        "Selected Numbers: " + selectedNumbers.join(", ");
-      updateTotalAmount();
-    }
+    populateTable(data.kolkataFatafat);
 
-    function updateTotalAmount() {
-      const betAmount = parseInt(betAmountInput.value) || 0;
-      const totalAmount = selectedNumbers.length * betAmount;
-      totalAmountDisplay.textContent = `Total: ${totalAmount} ₹`;
-    }
-
-    singleButton.addEventListener('click', () => {
-      singlePlayArea.style.display = 'block';
+    gameSelector.addEventListener('change', () => {
+      const selectedGame = gameSelector.value;
+      populateTable(data[selectedGame]);
     });
 
-    betAmountInput.addEventListener('input', updateTotalAmount);
-
-    submitPlayButton.addEventListener('click', () => {
-      const betAmount = parseInt(betAmountInput.value);
-      if (selectedNumbers.length === 0) {
-        alert("Please select at least one number.");
-        return;
-      }
-
-      if (!betAmount || betAmount <= 0) {
-        alert("Please enter a valid amount.");
-        return;
-      }
-
-      const totalAmount = selectedNumbers.length * betAmount;
-      if (totalAmount > walletAmount) {
-        alert("Insufficient wallet balance!");
-        return;
-      }
-
-      walletAmount -= totalAmount;
-      walletDisplay.textContent = `${walletAmount} ₹`;
-      alert(`Bet placed! Deducted ${totalAmount} ₹ from your wallet.`);
-      resetSinglePlay();
+    playButton.addEventListener('click', () => {
+      userSection.style.display = 'block';
     });
 
-    function resetSinglePlay() {
-      selectedNumbers = [];
-      betAmountInput.value = '';
-      updateSelectedNumbersDisplay();
-      totalAmountDisplay.textContent = "Total: 0 ₹";
-    }
+    loginRegisterButton.addEventListener('click', () => {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      if (email && password) {
+        alert(`Welcome, ${email}!`);
+        authForm.style.display = 'none';
+        actionButtons.style.display = 'flex';
+      } else {
+        alert('Please enter valid email and password.');
+      }
+    });
   </script>
 </body>
 </html>
