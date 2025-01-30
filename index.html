@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Enhanced Data Table</title>
+  <title>Enhanced Data Table with Sum Overlay</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -21,7 +21,8 @@
     th, td {
       border: 1px solid #ddd;
       text-align: center;
-      padding: 10px;
+      padding: 15px;
+      font-size: 16px;
       position: relative;
     }
 
@@ -44,19 +45,23 @@
       color: #555;
     }
 
-    .sum-overlay {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+    .box-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       font-weight: bold;
+    }
+
+    .sum-digit {
       color: red;
+      font-size: 14px;
     }
   </style>
 </head>
 <body>
   <table id="dataTable">
-    <caption>Enhanced Data Table with Digit Sums</caption>
+    <caption>Enhanced Data Table with Two Numbers per Box</caption>
     <thead>
       <tr>
         <th>Date</th>
@@ -95,19 +100,28 @@
 
       row.values.forEach(value => {
         const td = document.createElement('td');
-        td.textContent = value;
+        const boxContent = document.createElement('div');
+        boxContent.classList.add('box-content');
+
+        // Original number
+        const originalNumber = document.createElement('div');
+        originalNumber.textContent = value;
 
         // Calculate digit sum
         const digits = value.toString().split('').map(Number);
         const digitSum = digits.reduce((acc, num) => acc + num, 0);
         const lastDigit = digitSum % 10;
 
-        // Create sum overlay
-        const sumOverlay = document.createElement('div');
-        sumOverlay.textContent = lastDigit;
-        sumOverlay.classList.add('sum-overlay');
-        td.appendChild(sumOverlay);
+        // Display sum digit
+        const sumDigit = document.createElement('div');
+        sumDigit.textContent = lastDigit;
+        sumDigit.classList.add('sum-digit');
 
+        // Append original number and sum to the box
+        boxContent.appendChild(originalNumber);
+        boxContent.appendChild(sumDigit);
+
+        td.appendChild(boxContent);
         tr.appendChild(td);
       });
 
