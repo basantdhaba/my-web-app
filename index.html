@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Game Table (Responsive Layout)</title>
+  <title>Game Table (Fully Responsive)</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       background-color: #f9f9f9;
       margin: 0;
+      padding: 0;
     }
 
     h1 {
@@ -17,183 +18,136 @@
       padding: 10px;
     }
 
-    .header {
-      position: sticky;
-      top: 0;
-      background: #fff;
-      z-index: 1000;
-      padding: 5px 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    select {
-      padding: 8px;
-      font-size: 1em;
-    }
-
-    button {
-      padding: 8px 12px;
-      font-size: 1em;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 4px;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-    }
-
-    .scroll-container {
-      background-color: #ffffff;
-      padding: 10px;
-      overflow-x: auto;
-    }
-
-    table {
+    .game-table {
       width: 100%;
-      border-collapse: collapse;
-      min-width: 600px;
-      text-align: center;
+      max-width: 1000px;
       margin: 0 auto;
+      background: #ffffff;
+      padding: 10px;
     }
 
-    th, td {
-      border: 1px solid #ddd;
-      padding: 4px;
-      font-size: 0.9em;
+    .row {
+      display: flex;
+      border-bottom: 1px solid #ddd;
+      padding: 8px 0;
+      align-items: center;
+    }
+
+    .date {
+      width: 80px;
+      text-align: center;
+      font-weight: bold;
+      background-color: #f0f0f0;
+      padding: 5px;
+    }
+
+    .bazi-results {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .bazi-box {
+      flex: 1;
+      padding: 5px;
+      margin: 2px;
+      text-align: center;
+      background-color: #e0e7ff;
       position: relative;
     }
 
-    td span.sum {
+    .sum-digit {
       position: absolute;
       bottom: 2px;
       right: 2px;
-      font-size: 0.8em;
+      font-size: 0.75em;
       color: #333;
     }
 
-    /* Flexbox Table for Mobile */
-    @media screen and (max-width: 768px) {
-      table {
-        display: flex;
-        flex-direction: column;
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .date {
+        font-size: 0.9em;
       }
 
-      thead, tbody, tr {
-        display: flex;
-      }
-
-      tr {
-        flex-direction: row;
-        justify-content: space-between;
-      }
-
-      th, td {
-        flex: 1;
-        font-size: 0.8em;
+      .bazi-box {
+        font-size: 0.85em;
       }
     }
 
-    @media screen and (max-width: 480px) {
-      th, td {
-        font-size: 0.7em;
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.2em;
+      }
+
+      .date {
+        width: 60px;
+        font-size: 0.75em;
+      }
+
+      .bazi-box {
         padding: 3px;
+        font-size: 0.75em;
       }
     }
   </style>
 </head>
 <body>
 
-  <div class="header">
-    <h1>Game Data Table</h1>
-    <select id="gameSelector">
-      <option value="kolkataFatafat">Kolkata Fatafat</option>
-      <option value="mainBazar">Main Bazar</option>
-      <option value="gmMatka">GM Matka</option>
-    </select>
-    <button id="playButton">Play</button>
-  </div>
-
-  <div class="scroll-container">
-    <table id="dataTable">
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>1st Bazi</th>
-          <th>2nd Bazi</th>
-          <th>3rd Bazi</th>
-          <th>4th Bazi</th>
-          <th>5th Bazi</th>
-          <th>6th Bazi</th>
-          <th>7th Bazi</th>
-          <th>8th Bazi</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Dynamic Data Rows will go here -->
-      </tbody>
-    </table>
+  <h1>Game Table (Responsive)</h1>
+  <div class="game-table" id="gameTable">
+    <!-- Rows will be dynamically added here -->
   </div>
 
   <script>
-    const data = {
-      kolkataFatafat: [
-        { date: 'Wed 15/01', values: [469, 138, 678, 577, 290, 880, 458, 236] },
-        { date: 'Thu 16/01', values: [460, 790, 789, 239, 345, 290, 680, 899] }
-      ],
-      mainBazar: [
-        { date: 'Fri 17/01', values: [340, 447] },
-        { date: 'Sat 18/01', values: [480, 159] }
-      ],
-      gmMatka: [
-        { date: 'Sun 19/01', values: [256, 135, 459, 344, 100, 200, 345, 456] },
-        { date: 'Mon 20/01', values: [138, 349, 160, 269, 100, 380, 368, 560] }
-      ]
-    };
-
-    const tableBody = document.querySelector('#dataTable tbody');
-    const gameSelector = document.getElementById('gameSelector');
+    const gameData = [
+      { date: 'Wed 15/01', values: [469, 138, 678, 577, 290, 880, 458, 236] },
+      { date: 'Thu 16/01', values: [460, 790, 789, 239, 345, 290, 680, 899] },
+      { date: 'Fri 17/01', values: [340, 447, 167, 670, 237, 468, 770, 378] },
+      { date: 'Sat 18/01', values: [480, 159, 399, 358, 140, 460, 289, 889] }
+    ];
 
     function calculateSumOfDigits(number) {
       const digits = number.toString().split('').map(Number);
-      const sum = digits.reduce((acc, digit) => acc + digit, 0);
-      return sum % 10;
+      return digits.reduce((acc, digit) => acc + digit, 0) % 10;
     }
 
-    function populateTable(gameData) {
-      tableBody.innerHTML = '';
-      gameData.forEach(row => {
-        const tr = document.createElement('tr');
-        const dateCell = document.createElement('td');
-        dateCell.textContent = row.date;
-        tr.appendChild(dateCell);
-        row.values.forEach(value => {
-          const td = document.createElement('td');
-          td.textContent = value;
+    function createRow(date, values) {
+      const row = document.createElement('div');
+      row.classList.add('row');
 
-          // Calculate sum and append
-          const sumDigit = calculateSumOfDigits(value);
-          const sumSpan = document.createElement('span');
-          sumSpan.classList.add('sum');
-          sumSpan.textContent = sumDigit;
+      const dateBox = document.createElement('div');
+      dateBox.classList.add('date');
+      dateBox.textContent = date;
+      row.appendChild(dateBox);
 
-          td.appendChild(sumSpan);
-          tr.appendChild(td);
-        });
-        tableBody.appendChild(tr);
+      const baziResults = document.createElement('div');
+      baziResults.classList.add('bazi-results');
+
+      values.forEach(value => {
+        const baziBox = document.createElement('div');
+        baziBox.classList.add('bazi-box');
+        baziBox.textContent = value;
+
+        const sumDigit = calculateSumOfDigits(value);
+        const sumSpan = document.createElement('span');
+        sumSpan.classList.add('sum-digit');
+        sumSpan.textContent = sumDigit;
+
+        baziBox.appendChild(sumSpan);
+        baziResults.appendChild(baziBox);
       });
+
+      row.appendChild(baziResults);
+      return row;
     }
 
-    populateTable(data.kolkataFatafat);
-
-    gameSelector.addEventListener('change', () => {
-      const selectedGame = gameSelector.value;
-      populateTable(data[selectedGame]);
+    const gameTable = document.getElementById('gameTable');
+    gameData.forEach(entry => {
+      const row = createRow(entry.date, entry.values);
+      gameTable.appendChild(row);
     });
   </script>
+
 </body>
 </html>
