@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Game Table Version 1.1 - Responsive</title>
+  <title>Game Table Version 1.2 (Responsive)</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -52,16 +52,16 @@
     }
 
     .scroll-container {
-      max-height: 400px;
-      overflow-y: auto;
+      overflow-x: auto;
       margin-top: 10px;
+      background-color: #ffffff;
     }
 
     table {
       width: 100%;
+      min-width: 600px;
       border-collapse: collapse;
       margin: 0 auto;
-      table-layout: auto;
     }
 
     th, td {
@@ -80,34 +80,18 @@
       color: #333;
     }
 
-    /* Responsive Styles */
+    /* Responsive Design */
     @media screen and (max-width: 768px) {
-      table, thead, tbody, th, td, tr {
+      table {
         display: block;
+        overflow-x: auto;
       }
+    }
 
-      thead tr {
-        display: none;
-      }
-
-      tbody tr {
-        margin-bottom: 10px;
-        display: block;
-        border-bottom: 2px solid #ddd;
-      }
-
-      td {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px;
-        text-align: left;
-      }
-
-      td:before {
-        content: attr(data-label);
-        font-weight: bold;
-        text-transform: capitalize;
+    @media screen and (max-width: 480px) {
+      th, td {
+        font-size: 0.9em;
+        padding: 6px;
       }
     }
   </style>
@@ -176,20 +160,18 @@
       gameData.forEach(row => {
         const tr = document.createElement('tr');
         const dateCell = document.createElement('td');
-        dateCell.setAttribute('data-label', 'Date');
         dateCell.textContent = row.date;
         tr.appendChild(dateCell);
-        row.values.forEach((value, index) => {
+        row.values.forEach(value => {
           const td = document.createElement('td');
-          td.setAttribute('data-label', `${index + 1}th Bazi`);
           td.textContent = value;
-
+          
           // Calculate sum and append
           const sumDigit = calculateSumOfDigits(value);
           const sumSpan = document.createElement('span');
           sumSpan.classList.add('sum');
           sumSpan.textContent = sumDigit;
-
+          
           td.appendChild(sumSpan);
           tr.appendChild(td);
         });
