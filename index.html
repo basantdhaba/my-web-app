@@ -3,12 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Enhanced Data Table with Bazi Columns</title>
+  <title>Enhanced Data Table with Game Selector</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       background-color: #f9f9f9;
       margin: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2em;
+    }
+
+    select {
+      display: block;
+      margin: 20px auto;
+      padding: 10px;
+      font-size: 1.2em;
+      width: 300px;
+      text-align: center;
     }
 
     table {
@@ -22,8 +36,10 @@
       border: 1px solid #ddd;
       text-align: center;
       padding: 15px;
-      font-size: 16px;
+      font-size: 20px;
       position: relative;
+      font-weight: bold;
+      color: black;
     }
 
     th {
@@ -54,14 +70,23 @@
     }
 
     .sum-digit {
-      color: red;
-      font-size: 14px;
+      font-size: 18px;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
+  <h1>Game Data Table</h1>
+
+  <!-- Game Selection Dropdown -->
+  <select id="gameSelector">
+    <option value="kolkataFatafat">Kolkata Fatafat</option>
+    <option value="mainBazar">Main Bazar</option>
+    <option value="gmMatka">GM Matka</option>
+  </select>
+
   <table id="dataTable">
-    <caption>Enhanced Data Table with Bazi Columns</caption>
+    <caption>Data Table for Selected Game</caption>
     <thead>
       <tr>
         <th>Date</th>
@@ -82,50 +107,73 @@
 
   <script>
     // Sample Data
-    const data = [
-      { date: 'Wed 15/01', values: [469, 138, 678, 577, 290, 880, 458, 236] },
-      { date: 'Thu 16/01', values: [460, 790, 789, 239, 345, 290, 680, 899] },
-      { date: 'Fri 17/01', values: [340, 447, 167, 670, 237, 468, 770, 378] },
-    ];
+    const data = {
+      kolkataFatafat: [
+        { date: 'Wed 15/01', values: [469, 138, 678, 577, 290, 880, 458, 236] },
+        { date: 'Thu 16/01', values: [460, 790, 789, 239, 345, 290, 680, 899] }
+      ],
+      mainBazar: [
+        { date: 'Fri 17/01', values: [340, 447, 167, 670, 237, 468, 770, 378] },
+        { date: 'Sat 18/01', values: [480, 159, 399, 358, 140, 460, 289, 889] }
+      ],
+      gmMatka: [
+        { date: 'Sun 19/01', values: [256, 135, 459, 344, 100, 200, 345, 456] },
+        { date: 'Mon 20/01', values: [138, 349, 160, 269, 100, 380, 368, 560] }
+      ]
+    };
 
-    // Populate Table Function
     const tableBody = document.querySelector('#dataTable tbody');
+    const gameSelector = document.getElementById('gameSelector');
 
-    data.forEach(row => {
-      const tr = document.createElement('tr');
-      const dateCell = document.createElement('td');
-      dateCell.textContent = row.date;
-      dateCell.classList.add('day');
-      tr.appendChild(dateCell);
+    // Function to populate the table based on selected game
+    function populateTable(gameData) {
+      tableBody.innerHTML = ''; // Clear existing rows
 
-      row.values.forEach(value => {
-        const td = document.createElement('td');
-        const boxContent = document.createElement('div');
-        boxContent.classList.add('box-content');
+      gameData.forEach(row => {
+        const tr = document.createElement('tr');
+        const dateCell = document.createElement('td');
+        dateCell.textContent = row.date;
+        dateCell.classList.add('day');
+        tr.appendChild(dateCell);
 
-        // Original number
-        const originalNumber = document.createElement('div');
-        originalNumber.textContent = value;
+        row.values.forEach(value => {
+          const td = document.createElement('td');
+          const boxContent = document.createElement('div');
+          boxContent.classList.add('box-content');
 
-        // Calculate digit sum
-        const digits = value.toString().split('').map(Number);
-        const digitSum = digits.reduce((acc, num) => acc + num, 0);
-        const lastDigit = digitSum % 10;
+          // Original number
+          const originalNumber = document.createElement('div');
+          originalNumber.textContent = value;
 
-        // Display sum digit
-        const sumDigit = document.createElement('div');
-        sumDigit.textContent = lastDigit;
-        sumDigit.classList.add('sum-digit');
+          // Calculate digit sum
+          const digits = value.toString().split('').map(Number);
+          const digitSum = digits.reduce((acc, num) => acc + num, 0);
+          const lastDigit = digitSum % 10;
 
-        // Append original number and sum to the box
-        boxContent.appendChild(originalNumber);
-        boxContent.appendChild(sumDigit);
+          // Display sum digit
+          const sumDigit = document.createElement('div');
+          sumDigit.textContent = lastDigit;
+          sumDigit.classList.add('sum-digit');
 
-        td.appendChild(boxContent);
-        tr.appendChild(td);
+          // Append original number and sum to the box
+          boxContent.appendChild(originalNumber);
+          boxContent.appendChild(sumDigit);
+
+          td.appendChild(boxContent);
+          tr.appendChild(td);
+        });
+
+        tableBody.appendChild(tr);
       });
+    }
 
-      tableBody.appendChild(tr);
+    // Initial population with default game
+    populateTable(data.kolkataFatafat);
+
+    // Handle game selection
+    gameSelector.addEventListener('change', () => {
+      const selectedGame = gameSelector.value;
+      populateTable(data[selectedGame]);
     });
   </script>
 </body>
