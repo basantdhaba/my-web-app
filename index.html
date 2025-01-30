@@ -107,29 +107,7 @@
       margin-top: 8px;
     }
 
-    /* Box Container for Sticky Horizontal Result Boxes */
-    .box-container {
-      display: flex;
-      position: sticky;
-      top: 60px;
-      background-color: #f8f9fa;
-      padding: 10px 0;
-      z-index: 999;
-      justify-content: space-around;
-      gap: 10px;
-    }
-
-    .box {
-      background-color: #e0f7fa;
-      padding: 15px 20px;
-      border-radius: 5px;
-      text-align: center;
-      font-size: 1.2em;
-      font-weight: bold;
-      width: 100px;
-    }
-
-    /* Responsive Adjustments */
+    /* Responsive Design */
     @media (max-width: 768px) {
       .date {
         font-size: 0.9em;
@@ -138,10 +116,6 @@
       .bazi-box {
         font-size: 1.2em;
         height: 70px;
-      }
-
-      .box {
-        font-size: 1em;
       }
     }
 
@@ -159,10 +133,6 @@
         font-size: 1em;
         height: 60px;
       }
-
-      .box {
-        font-size: 0.9em;
-      }
     }
   </style>
 </head>
@@ -177,13 +147,6 @@
       <option value="gmMatka">GM Matka</option>
     </select>
     <button id="playButton">Play</button>
-  </div>
-
-  <!-- Sticky Result Boxes -->
-  <div class="box-container">
-    <div class="box" style="background-color: #e0f7fa;">Single</div>
-    <div class="box" style="background-color: #ffe0b2;">Patti</div>
-    <div class="box" style="background-color: #c8e6c9;">Juri</div>
   </div>
 
   <div class="game-table" id="gameTable"></div>
@@ -230,4 +193,37 @@
         numberSpan.textContent = value;
 
         const sumDigit = calculateSumOfDigits(value);
-        const sumSpan = document.createElement('div
+        const sumSpan = document.createElement('div');
+        sumSpan.classList.add('sum-digit');
+        sumSpan.textContent = sumDigit;
+
+        baziBox.appendChild(numberSpan);
+        baziBox.appendChild(sumSpan);
+        baziResults.appendChild(baziBox);
+      });
+
+      row.appendChild(baziResults);
+      return row;
+    }
+
+    const gameTable = document.getElementById('gameTable');
+    const gameSelector = document.getElementById('gameSelector');
+
+    function populateTable(selectedGame) {
+      gameTable.innerHTML = '';
+      gameData[selectedGame].forEach(entry => {
+        const row = createRow(entry.date, entry.values);
+        gameTable.appendChild(row);
+      });
+    }
+
+    gameSelector.addEventListener('change', () => {
+      populateTable(gameSelector.value);
+    });
+
+    // Populate initial game table
+    populateTable(gameSelector.value);
+  </script>
+
+</body>
+</html>
