@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Enhanced Data Table with Fixed Dropdown</title>
+  <title>Game Table with Play Button</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -17,22 +17,38 @@
       padding: 10px;
     }
 
-    .fixed-header {
+    .header {
       position: sticky;
       top: 0;
       background: #fff;
       z-index: 1000;
       padding: 10px 0;
       box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
     }
 
     select {
-      display: block;
-      margin: 0 auto;
       padding: 10px;
       font-size: 1.2em;
-      width: 300px;
       text-align: center;
+    }
+
+    button {
+      padding: 10px 15px;
+      font-size: 1.2em;
+      cursor: pointer;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
     }
 
     table {
@@ -93,13 +109,14 @@
 </head>
 <body>
 
-  <div class="fixed-header">
+  <div class="header">
     <h1>Game Data Table</h1>
     <select id="gameSelector">
       <option value="kolkataFatafat">Kolkata Fatafat</option>
       <option value="mainBazar">Main Bazar</option>
       <option value="gmMatka">GM Matka</option>
     </select>
+    <button id="playButton">Play</button>
   </div>
 
   <div class="scroll-container">
@@ -143,6 +160,7 @@
 
     const tableBody = document.querySelector('#dataTable tbody');
     const gameSelector = document.getElementById('gameSelector');
+    const playButton = document.getElementById('playButton');
 
     // Function to populate the table based on selected game
     function populateTable(gameData) {
@@ -193,6 +211,12 @@
     gameSelector.addEventListener('change', () => {
       const selectedGame = gameSelector.value;
       populateTable(data[selectedGame]);
+    });
+
+    // Play button click handler
+    playButton.addEventListener('click', () => {
+      const selectedGameText = gameSelector.options[gameSelector.selectedIndex].text;
+      alert(`Play with ${selectedGameText}`);
     });
   </script>
 </body>
