@@ -3,22 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Enhanced Data Table with Game Selector</title>
+  <title>Enhanced Data Table with Fixed Dropdown</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       background-color: #f9f9f9;
-      margin: 20px;
+      margin: 0;
     }
 
     h1 {
       text-align: center;
       font-size: 2em;
+      padding: 10px;
+    }
+
+    .fixed-header {
+      position: sticky;
+      top: 0;
+      background: #fff;
+      z-index: 1000;
+      padding: 10px 0;
+      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
     }
 
     select {
       display: block;
-      margin: 20px auto;
+      margin: 0 auto;
       padding: 10px;
       font-size: 1.2em;
       width: 300px;
@@ -73,37 +83,46 @@
       font-size: 18px;
       font-weight: bold;
     }
+
+    .scroll-container {
+      max-height: 400px;
+      overflow-y: auto;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
-  <h1>Game Data Table</h1>
 
-  <!-- Game Selection Dropdown -->
-  <select id="gameSelector">
-    <option value="kolkataFatafat">Kolkata Fatafat</option>
-    <option value="mainBazar">Main Bazar</option>
-    <option value="gmMatka">GM Matka</option>
-  </select>
+  <div class="fixed-header">
+    <h1>Game Data Table</h1>
+    <select id="gameSelector">
+      <option value="kolkataFatafat">Kolkata Fatafat</option>
+      <option value="mainBazar">Main Bazar</option>
+      <option value="gmMatka">GM Matka</option>
+    </select>
+  </div>
 
-  <table id="dataTable">
-    <caption>Data Table for Selected Game</caption>
-    <thead>
-      <tr>
-        <th>Date</th>
-        <th>1st Bazi</th>
-        <th>2nd Bazi</th>
-        <th>3rd Bazi</th>
-        <th>4th Bazi</th>
-        <th>5th Bazi</th>
-        <th>6th Bazi</th>
-        <th>7th Bazi</th>
-        <th>8th Bazi</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Dynamic Data Rows will go here -->
-    </tbody>
-  </table>
+  <div class="scroll-container">
+    <table id="dataTable">
+      <caption>Data Table for Selected Game</caption>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>1st Bazi</th>
+          <th>2nd Bazi</th>
+          <th>3rd Bazi</th>
+          <th>4th Bazi</th>
+          <th>5th Bazi</th>
+          <th>6th Bazi</th>
+          <th>7th Bazi</th>
+          <th>8th Bazi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Dynamic Data Rows will go here -->
+      </tbody>
+    </table>
+  </div>
 
   <script>
     // Sample Data
@@ -113,8 +132,8 @@
         { date: 'Thu 16/01', values: [460, 790, 789, 239, 345, 290, 680, 899] }
       ],
       mainBazar: [
-        { date: 'Fri 17/01', values: [340, 447, 167, 670, 237, 468, 770, 378] },
-        { date: 'Sat 18/01', values: [480, 159, 399, 358, 140, 460, 289, 889] }
+        { date: 'Fri 17/01', values: [340, 447] },
+        { date: 'Sat 18/01', values: [480, 159] }
       ],
       gmMatka: [
         { date: 'Sun 19/01', values: [256, 135, 459, 344, 100, 200, 345, 456] },
@@ -136,7 +155,7 @@
         dateCell.classList.add('day');
         tr.appendChild(dateCell);
 
-        row.values.forEach(value => {
+        row.values.forEach((value, index) => {
           const td = document.createElement('td');
           const boxContent = document.createElement('div');
           boxContent.classList.add('box-content');
