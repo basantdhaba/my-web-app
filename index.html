@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Table Interface</title>
+  <title>Enhanced Data Table</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -22,6 +22,7 @@
       border: 1px solid #ddd;
       text-align: center;
       padding: 10px;
+      position: relative;
     }
 
     th {
@@ -42,11 +43,20 @@
       font-weight: bold;
       color: #555;
     }
+
+    .sum-overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-weight: bold;
+      color: red;
+    }
   </style>
 </head>
 <body>
   <table id="dataTable">
-    <caption>Daily Data Table</caption>
+    <caption>Enhanced Data Table with Digit Sums</caption>
     <thead>
       <tr>
         <th>Date</th>
@@ -71,12 +81,11 @@
       { date: 'Wed 15/01', values: [469, 138, 678, 577, 290, 880, 458, 236] },
       { date: 'Thu 16/01', values: [460, 790, 789, 239, 345, 290, 680, 899] },
       { date: 'Fri 17/01', values: [340, 447, 167, 670, 237, 468, 770, 378] },
-      // Add more rows as needed
     ];
 
     // Populate Table Function
     const tableBody = document.querySelector('#dataTable tbody');
-    
+
     data.forEach(row => {
       const tr = document.createElement('tr');
       const dateCell = document.createElement('td');
@@ -87,6 +96,18 @@
       row.values.forEach(value => {
         const td = document.createElement('td');
         td.textContent = value;
+
+        // Calculate digit sum
+        const digits = value.toString().split('').map(Number);
+        const digitSum = digits.reduce((acc, num) => acc + num, 0);
+        const lastDigit = digitSum % 10;
+
+        // Create sum overlay
+        const sumOverlay = document.createElement('div');
+        sumOverlay.textContent = lastDigit;
+        sumOverlay.classList.add('sum-overlay');
+        td.appendChild(sumOverlay);
+
         tr.appendChild(td);
       });
 
