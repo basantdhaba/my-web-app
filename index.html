@@ -66,28 +66,20 @@
       overflow-y: auto;
     }
 
-    .number-container {
-      margin-top: 20px;
-    }
-
     .number-buttons {
       display: flex;
       justify-content: center;
       gap: 10px;
       flex-wrap: wrap;
       max-width: 300px;
-      margin: 10px auto;
+      margin: 20px auto;
     }
 
     .selected-numbers {
-      margin-top: 15px;
+      margin-top: 10px;
       font-size: 1.2em;
       text-align: center;
-    }
-
-    .result-sum {
-      font-weight: bold;
-      color: #007bff;
+      color: #333;
     }
   </style>
 </head>
@@ -111,16 +103,15 @@
           <th>1st Bazi</th>
           <th>2nd Bazi</th>
           <th>3rd Bazi</th>
-          <th>Sum of 3 Digits</th>
         </tr>
       </thead>
       <tbody></tbody>
     </table>
   </div>
 
-  <div id="numberArea" class="number-container" style="display: none;">
+  <div id="numberArea" style="display: none;">
     <div class="number-buttons" id="numberButtons"></div>
-    <div class="selected-numbers" id="selectedNumbers"></div>
+    <div class="selected-numbers" id="selectedNumbers">Selected Numbers: </div>
   </div>
 
   <script>
@@ -147,24 +138,27 @@
 
     function populateTable(gameData) {
       tableBody.innerHTML = '';
+
       gameData.forEach(row => {
         const tr = document.createElement('tr');
         const dateCell = document.createElement('td');
         dateCell.textContent = row.date;
         tr.appendChild(dateCell);
 
-        let sum = 0;
         row.values.forEach(value => {
           const td = document.createElement('td');
           td.textContent = value;
-          tr.appendChild(td);
-          sum += value;
-        });
 
-        const sumCell = document.createElement('td');
-        sumCell.classList.add('result-sum');
-        sumCell.textContent = sum;
-        tr.appendChild(sumCell);
+          // Calculate sum of digits and show below the number
+          const digitSum = value.toString().split('').reduce((acc, num) => acc + parseInt(num), 0);
+          const sumDisplay = document.createElement('div');
+          sumDisplay.textContent = `Sum: ${digitSum}`;
+          sumDisplay.style.fontSize = '0.9em';
+          sumDisplay.style.color = '#007bff';
+          td.appendChild(sumDisplay);
+
+          tr.appendChild(td);
+        });
 
         tableBody.appendChild(tr);
       });
@@ -180,14 +174,17 @@
     document.getElementById('playButton').addEventListener('click', () => {
       numberArea.style.display = 'block';
       numberButtonsContainer.innerHTML = '';
+      selectedNumbersDisplay.textContent = 'Selected Numbers: ';
 
+      // Create buttons 0-9
       for (let i = 0; i <= 9; i++) {
         const button = document.createElement('button');
         button.textContent = i;
         button.addEventListener('click', () => {
-          selectedNumbersDisplay.textContent += selectedNumbersDisplay.textContent 
-            ? `,${i}` 
-            : `${i}`;
+          const currentText = selectedNumbersDisplay.textContent.replace('Selected Numbers: ', '');
+          selectedNumbersDisplay.textContent = currentText
+            ? `Selected Numbers: ${currentText},${i}`
+            : `Selected Numbers: ${i}`;
         });
         numberButtonsContainer.appendChild(button);
       }
