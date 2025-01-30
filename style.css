@@ -1,42 +1,17 @@
-body {
-    background-color: #f0f0f0;
-    color: white;
-    font-family: Arial, sans-serif;
-    text-align: center;
-}
+@media (max-width: 600px) {
+  .box-container {
+    flex-direction: column;
+  }
 
-.container {
-    background: #333;
-    padding: 20px;
-    margin: auto;
-    width: 300px;
-    border-radius: 10px;
-}
+  .box {
+    flex-basis: 90%;
+  }
 
-input, button {
-    width: 80%;
-    padding: 10px;
-    margin: 10px 0;
-    border: none;
-    border-radius: 5px;
-}
+  .bazi-results {
+    flex-wrap: wrap;
+  }
 
-button {
-    background: green;
-    color: white;
-    cursor: pointer;
-}
-
-.number-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 5px;
-}
-
-.number-grid button {
-    background: blue;
-    color: white;
-    font-size: 16px;
-    padding: 10px;
-    cursor: pointer;
+  .bazi-box {
+    width: 40px;
+  }
 }
