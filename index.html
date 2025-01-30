@@ -25,9 +25,8 @@
       padding: 10px 0;
       box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
       display: flex;
-      align-items: center;
       justify-content: center;
-      gap: 10px;
+      gap: 15px;
     }
 
     select {
@@ -147,12 +146,14 @@
       <option value="gmMatka">GM Matka</option>
     </select>
     <button id="playButton">Play</button>
-<div id="loginSection" style="display: none; margin-top: 10px; padding: 10px; background-color: #f9f9f9; width: 300px; border: 1px solid #ddd;">
-  <h3>Login or Register</h3>
-  <input type="email" id="email" placeholder="Enter your email" required style="width: 90%; padding: 8px; margin: 5px 0;">
-  <input type="password" id="password" placeholder="Enter your password" required style="width: 90%; padding: 8px; margin: 5px 0;">
-  <button id="loginSubmitButton" style="padding: 8px 16px; background-color: #28a745; color: white; border: none;">Submit</button>
-</div>
+  </div>
+
+  <div id="loginSection" style="display: none; margin-top: 10px; padding: 10px; background-color: #f9f9f9; width: 300px; border: 1px solid #ddd;">
+    <h3>Login or Register</h3>
+    <input type="email" id="email" placeholder="Enter your email" required style="width: 90%; padding: 8px; margin: 5px 0;">
+    <input type="password" id="password" placeholder="Enter your password" required style="width: 90%; padding: 8px; margin: 5px 0;">
+    <button id="loginSubmitButton" style="padding: 8px 16px; background-color: #28a745; color: white; border: none;">Submit</button>
+  </div>
 
   <div class="game-table" id="gameTable"></div>
 
@@ -224,6 +225,23 @@
 
     gameSelector.addEventListener('change', () => {
       populateTable(gameSelector.value);
+    });
+
+    document.getElementById('playButton').addEventListener('click', () => {
+      const loginSection = document.getElementById('loginSection');
+      loginSection.style.display = loginSection.style.display === 'none' ? 'block' : 'none';
+    });
+
+    document.getElementById('loginSubmitButton').addEventListener('click', () => {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      if (email === 'test@demo.com' && password === '12345') {
+        alert('Login successful!');
+        document.getElementById('loginSection').style.display = 'none';
+      } else {
+        alert('Invalid credentials. Use test@demo.com and password 12345.');
+      }
     });
 
     // Populate initial game table
