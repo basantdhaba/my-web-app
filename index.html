@@ -3,12 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Game Table with Wallet Feature</title>
+  <title>Game Table with User Actions</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       background-color: #f9f9f9;
       margin: 0;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2em;
+      padding: 10px;
     }
 
     .header {
@@ -17,91 +23,99 @@
       background: #fff;
       z-index: 1000;
       padding: 10px 0;
+      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+      padding: 10px 20px;
     }
 
-    #wallet {
+    select {
       padding: 10px;
       font-size: 1.2em;
-      color: green;
     }
 
-    select, button {
-      padding: 10px;
+    button {
+      padding: 10px 15px;
       font-size: 1.2em;
+      cursor: pointer;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .wallet {
+      font-size: 1.2em;
+      font-weight: bold;
     }
 
     .user-section {
+      display: none;
       padding: 20px;
       background-color: #f0f0f0;
+      text-align: center;
+    }
+
+    .number-selection {
+      margin-top: 20px;
       text-align: center;
     }
 
     .number-buttons {
       display: flex;
       justify-content: center;
-      gap: 10px;
-      margin: 20px 0;
+      flex-wrap: wrap;
+      margin: 10px 0;
     }
 
     .number-buttons button {
-      width: 40px;
-      height: 40px;
+      margin: 5px;
+      padding: 10px 20px;
       font-size: 1.2em;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
+      background-color: #17a2b8;
     }
 
     .number-buttons button:hover {
-      background-color: #0056b3;
+      background-color: #138496;
     }
 
     #selectedNumbers {
+      margin: 10px;
       font-size: 1.2em;
-      color: black;
-      margin-top: 10px;
     }
 
-    .bet-section {
-      margin-top: 10px;
-    }
-
-    #betAmount {
+    input[type="number"] {
       padding: 10px;
-      font-size: 1em;
+      font-size: 1.2em;
       width: 100px;
+      margin-top: 10px;
     }
 
-    #playBetButton {
-      padding: 10px;
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    #totalAmount {
       font-size: 1.2em;
-      background-color: #28a745;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    #playBetButton:hover {
-      background-color: #218838;
-    }
-
-    .error {
-      color: red;
-      font-size: 0.9em;
+      margin-top: 10px;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
 
   <div class="header">
-    <div id="wallet">Wallet: $1000</div>
+    <div class="wallet">Wallet: <span id="walletAmount">1000</span> ₹</div>
+    <h1>Game Data Table</h1>
     <select id="gameSelector">
       <option value="kolkataFatafat">Kolkata Fatafat</option>
       <option value="mainBazar">Main Bazar</option>
@@ -111,82 +125,98 @@
   </div>
 
   <div class="user-section" id="userSection">
-    <div class="action-buttons">
+    <div id="actionButtons" class="action-buttons">
       <button id="singleButton">Single</button>
       <button>Patti</button>
       <button>Judi</button>
     </div>
 
-    <div id="singleSection" style="display: none;">
-      <h2>Pick Your Numbers</h2>
-      <div class="number-buttons">
-        <!-- Number Buttons from 0 to 9 -->
-        <button onclick="selectNumber(0)">0</button>
-        <button onclick="selectNumber(1)">1</button>
-        <button onclick="selectNumber(2)">2</button>
-        <button onclick="selectNumber(3)">3</button>
-        <button onclick="selectNumber(4)">4</button>
-        <button onclick="selectNumber(5)">5</button>
-        <button onclick="selectNumber(6)">6</button>
-        <button onclick="selectNumber(7)">7</button>
-        <button onclick="selectNumber(8)">8</button>
-        <button onclick="selectNumber(9)">9</button>
-      </div>
-
-      <div id="selectedNumbers">Selected Numbers: </div>
-
-      <div class="bet-section">
-        <input type="number" id="betAmount" placeholder="Enter Bet Amount" min="1" />
-        <button id="playBetButton">Play Bet</button>
-        <div id="error" class="error"></div>
+    <!-- Single Play Area -->
+    <div id="singlePlayArea" style="display: none;">
+      <h2>Single Play</h2>
+      <div class="number-selection">
+        <p>Select Numbers:</p>
+        <div class="number-buttons" id="numberButtons"></div>
+        <div id="selectedNumbers">Selected Numbers: None</div>
+        <input type="number" id="betAmount" placeholder="Enter Amount" min="1" />
+        <div id="totalAmount">Total: 0 ₹</div>
+        <button id="submitPlayButton">Play</button>
       </div>
     </div>
   </div>
 
   <script>
     let walletAmount = 1000;
+    const walletDisplay = document.getElementById('walletAmount');
+    const singleButton = document.getElementById('singleButton');
+    const singlePlayArea = document.getElementById('singlePlayArea');
+    const numberButtons = document.getElementById('numberButtons');
+    const selectedNumbersDisplay = document.getElementById('selectedNumbers');
+    const betAmountInput = document.getElementById('betAmount');
+    const totalAmountDisplay = document.getElementById('totalAmount');
+    const submitPlayButton = document.getElementById('submitPlayButton');
+
     let selectedNumbers = [];
 
-    document.getElementById('wallet').textContent = `Wallet: $${walletAmount}`;
-
-    document.getElementById('playButton').addEventListener('click', () => {
-      document.getElementById('userSection').style.display = 'block';
-    });
-
-    document.getElementById('singleButton').addEventListener('click', () => {
-      document.getElementById('singleSection').style.display = 'block';
-    });
-
-    function selectNumber(number) {
-      selectedNumbers.push(number);
-      document.getElementById('selectedNumbers').textContent = `Selected Numbers: ${selectedNumbers.join(', ')}`;
+    // Generate Number Buttons (0-9)
+    for (let i = 0; i <= 9; i++) {
+      const button = document.createElement('button');
+      button.textContent = i;
+      button.addEventListener('click', () => {
+        selectedNumbers.push(i);
+        updateSelectedNumbersDisplay();
+      });
+      numberButtons.appendChild(button);
     }
 
-    document.getElementById('playBetButton').addEventListener('click', () => {
-      const betAmount = parseInt(document.getElementById('betAmount').value);
+    function updateSelectedNumbersDisplay() {
+      selectedNumbersDisplay.textContent =
+        "Selected Numbers: " + selectedNumbers.join(", ");
+      updateTotalAmount();
+    }
+
+    function updateTotalAmount() {
+      const betAmount = parseInt(betAmountInput.value) || 0;
+      const totalAmount = selectedNumbers.length * betAmount;
+      totalAmountDisplay.textContent = `Total: ${totalAmount} ₹`;
+    }
+
+    singleButton.addEventListener('click', () => {
+      singlePlayArea.style.display = 'block';
+    });
+
+    betAmountInput.addEventListener('input', updateTotalAmount);
+
+    submitPlayButton.addEventListener('click', () => {
+      const betAmount = parseInt(betAmountInput.value);
+      if (selectedNumbers.length === 0) {
+        alert("Please select at least one number.");
+        return;
+      }
 
       if (!betAmount || betAmount <= 0) {
-        document.getElementById('error').textContent = 'Please enter a valid bet amount.';
+        alert("Please enter a valid amount.");
         return;
       }
 
-      const totalBet = selectedNumbers.length * betAmount;
-
-      if (walletAmount < totalBet) {
-        document.getElementById('error').textContent = 'Insufficient wallet balance.';
+      const totalAmount = selectedNumbers.length * betAmount;
+      if (totalAmount > walletAmount) {
+        alert("Insufficient wallet balance!");
         return;
       }
 
-      walletAmount -= totalBet;
-      document.getElementById('wallet').textContent = `Wallet: $${walletAmount}`;
-      document.getElementById('error').textContent = '';
-      alert(`You placed a bet of $${totalBet} on numbers: ${selectedNumbers.join(', ')}`);
-
-      // Reset for the next round
-      selectedNumbers = [];
-      document.getElementById('selectedNumbers').textContent = 'Selected Numbers: ';
-      document.getElementById('betAmount').value = '';
+      walletAmount -= totalAmount;
+      walletDisplay.textContent = `${walletAmount} ₹`;
+      alert(`Bet placed! Deducted ${totalAmount} ₹ from your wallet.`);
+      resetSinglePlay();
     });
+
+    function resetSinglePlay() {
+      selectedNumbers = [];
+      betAmountInput.value = '';
+      updateSelectedNumbersDisplay();
+      totalAmountDisplay.textContent = "Total: 0 ₹";
+    }
   </script>
 </body>
 </html>
