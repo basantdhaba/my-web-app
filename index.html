@@ -49,23 +49,73 @@
       background-color: #0056b3;
     }
 
-    #loginSection {
-      display: none;
-      margin-top: 10px;
+    .game-table {
+      width: 100%;
+      max-width: 1000px;
+      margin: 20px auto;
+      background: #ffffff;
       padding: 10px;
-      background-color: #f9f9f9;
-      width: 300px;
-      border: 1px solid #ddd;
     }
 
-    .box-container {
+    .row {
+      display: flex;
+      border-bottom: 1px solid #ddd;
+      padding: 8px 0;
+      align-items: center;
+    }
+
+    .date {
+      width: 80px;
+      text-align: center;
+      font-weight: bold;
+      background-color: #f0f0f0;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .bazi-results {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .bazi-box {
+      flex: 1;
+      height: 80px;
       display: flex;
       flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: #e0e7ff;
+      margin: 5px;
+      font-size: 1.5em;
+      font-weight: bold;
+      border-radius: 5px;
+      position: relative;
+      text-align: center;
+    }
+
+    .bazi-number {
+      font-size: 1.5em;
+    }
+
+    .sum-digit {
+      font-size: 1.5em;
+      color: #333;
+      margin-top: 8px;
+    }
+
+    /* Box Container for Sticky Horizontal Result Boxes */
+    .box-container {
+      display: flex;
       position: sticky;
-      top: 60px; /* Sticks below the header */
+      top: 60px;
       background-color: #f8f9fa;
       padding: 10px 0;
       z-index: 999;
+      justify-content: space-around;
       gap: 10px;
     }
 
@@ -76,19 +126,42 @@
       text-align: center;
       font-size: 1.2em;
       font-weight: bold;
+      width: 100px;
     }
 
-    .game-table {
-      width: 100%;
-      max-width: 1000px;
-      margin: 20px auto;
-      background: #ffffff;
-      padding: 10px;
-    }
-
+    /* Responsive Adjustments */
     @media (max-width: 768px) {
+      .date {
+        font-size: 0.9em;
+      }
+
+      .bazi-box {
+        font-size: 1.2em;
+        height: 70px;
+      }
+
       .box {
         font-size: 1em;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.2em;
+      }
+
+      .date {
+        width: 60px;
+        font-size: 0.75em;
+      }
+
+      .bazi-box {
+        font-size: 1em;
+        height: 60px;
+      }
+
+      .box {
+        font-size: 0.9em;
       }
     }
   </style>
@@ -106,13 +179,7 @@
     <button id="playButton">Play</button>
   </div>
 
-  <div id="loginSection">
-    <h3>Login or Register</h3>
-    <input type="email" id="email" placeholder="Enter your email" required style="width: 90%; padding: 8px; margin: 5px 0;">
-    <input type="password" id="password" placeholder="Enter your password" required style="width: 90%; padding: 8px; margin: 5px 0;">
-    <button id="loginSubmitButton" style="padding: 8px 16px; background-color: #28a745; color: white; border: none;">Submit</button>
-  </div>
-
+  <!-- Sticky Result Boxes -->
   <div class="box-container">
     <div class="box" style="background-color: #e0f7fa;">Single</div>
     <div class="box" style="background-color: #ffe0b2;">Patti</div>
@@ -189,26 +256,6 @@
 
     gameSelector.addEventListener('change', () => {
       populateTable(gameSelector.value);
-    });
-
-    // Show login form when Play button is clicked
-    const playButton = document.getElementById('playButton');
-    const loginSection = document.getElementById('loginSection');
-    playButton.addEventListener('click', () => {
-      loginSection.style.display = loginSection.style.display === 'none' ? 'block' : 'none';
-    });
-
-    // Handle login form submission
-    document.getElementById('loginSubmitButton').addEventListener('click', () => {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-
-      if (email === 'test@demo.com' && password === '12345') {
-        alert('Login Successful!');
-        loginSection.style.display = 'none'; // Hide login section on success
-      } else {
-        alert('Invalid login. Please try again.');
-      }
     });
 
     // Populate initial game table
