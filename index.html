@@ -60,31 +60,33 @@
 
     .box-container {
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
       margin-top: 10px;
-      padding: 10px 0;
+      text-align: center;
       background-color: #f8f9fa;
-      position: sticky;
-      top: 110px;
-      z-index: 999;
+      padding: 10px 0;
       gap: 10px;
-      overflow-x: auto;
     }
 
     .box {
       background-color: #e0f7fa;
       padding: 15px 20px;
       border-radius: 5px;
-      min-width: 100px;
       text-align: center;
       font-size: 1.2em;
       font-weight: bold;
     }
 
+    .game-table {
+      width: 100%;
+      max-width: 1000px;
+      margin: 20px auto;
+      background: #ffffff;
+      padding: 10px;
+    }
+
     @media (max-width: 768px) {
       .box {
-        min-width: 80px;
-        padding: 10px;
         font-size: 1em;
       }
     }
