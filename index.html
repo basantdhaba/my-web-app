@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Game Table with User Actions</title>
+  <title>Game Data Table</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -18,12 +18,8 @@
     }
 
     .header {
-      position: sticky;
-      top: 0;
       background: #fff;
-      z-index: 1000;
       padding: 10px 0;
-      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -33,7 +29,6 @@
     select {
       padding: 10px;
       font-size: 1.2em;
-      text-align: center;
     }
 
     button {
@@ -51,35 +46,24 @@
       background-color: #0056b3;
     }
 
-    .scroll-container {
-      max-height: 400px;
-      overflow-y: auto;
-      margin-top: 10px;
-    }
-
-    .user-section {
-      display: none;
-      padding: 20px;
-      background-color: #f0f0f0;
-      text-align: center;
-    }
-
-    .action-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
+    table {
+      width: 100%;
+      border-collapse: collapse;
       margin-top: 20px;
     }
 
-    .action-buttons button {
-      padding: 15px 30px;
-      font-size: 1.2em;
-      background-color: #28a745;
-      border-radius: 8px;
+    table, th, td {
+      border: 1px solid #ddd;
     }
 
-    .action-buttons button:hover {
-      background-color: #218838;
+    th, td {
+      padding: 10px;
+      text-align: center;
+    }
+
+    .scroll-container {
+      max-height: 400px;
+      overflow-y: auto;
     }
 
     .number-container {
@@ -95,29 +79,19 @@
       margin: 10px auto;
     }
 
-    .number-buttons button {
-      width: 50px;
-      height: 50px;
-      font-size: 1.5em;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 5px;
-    }
-
-    .number-buttons button:hover {
-      background-color: #0056b3;
-    }
-
     .selected-numbers {
       margin-top: 15px;
       font-size: 1.2em;
       text-align: center;
     }
+
+    .result-sum {
+      font-weight: bold;
+      color: #007bff;
+    }
   </style>
 </head>
 <body>
-
   <div class="header">
     <h1>Game Data Table</h1>
     <select id="gameSelector">
@@ -126,27 +100,6 @@
       <option value="gmMatka">GM Matka</option>
     </select>
     <button id="playButton">Play</button>
-  </div>
-
-  <div class="user-section" id="userSection">
-    <form id="authForm">
-      <h2>Login or Register</h2>
-      <input type="email" id="email" placeholder="Enter your email" required />
-      <input type="password" id="password" placeholder="Enter your password" required />
-      <button type="button" id="loginRegisterButton">Submit</button>
-    </form>
-
-    <div id="actionButtons" class="action-buttons" style="display: none;">
-      <button id="singleButton">Single</button>
-      <button>Patti</button>
-      <button>Judi</button>
-    </div>
-    
-    <!-- Area for number buttons -->
-    <div id="numberArea" class="number-container" style="display: none;">
-      <div class="number-buttons" id="numberButtons"></div>
-      <div class="selected-numbers" id="selectedNumbers"></div>
-    </div>
   </div>
 
   <div class="scroll-container">
@@ -158,59 +111,61 @@
           <th>1st Bazi</th>
           <th>2nd Bazi</th>
           <th>3rd Bazi</th>
-          <th>4th Bazi</th>
-          <th>5th Bazi</th>
-          <th>6th Bazi</th>
-          <th>7th Bazi</th>
-          <th>8th Bazi</th>
+          <th>Sum of 3 Digits</th>
         </tr>
       </thead>
-      <tbody>
-        <!-- Dynamic Data Rows will go here -->
-      </tbody>
+      <tbody></tbody>
     </table>
+  </div>
+
+  <div id="numberArea" class="number-container" style="display: none;">
+    <div class="number-buttons" id="numberButtons"></div>
+    <div class="selected-numbers" id="selectedNumbers"></div>
   </div>
 
   <script>
     const data = {
       kolkataFatafat: [
-        { date: 'Wed 15/01', values: [469, 138, 678, 577, 290, 880, 458, 236] },
-        { date: 'Thu 16/01', values: [460, 790, 789, 239, 345, 290, 680, 899] }
+        { date: 'Wed 15/01', values: [469, 138, 678] },
+        { date: 'Thu 16/01', values: [460, 790, 789] }
       ],
       mainBazar: [
-        { date: 'Fri 17/01', values: [340, 447] },
-        { date: 'Sat 18/01', values: [480, 159] }
+        { date: 'Fri 17/01', values: [340, 447, 559] },
+        { date: 'Sat 18/01', values: [480, 159, 278] }
       ],
       gmMatka: [
-        { date: 'Sun 19/01', values: [256, 135, 459, 344, 100, 200, 345, 456] },
-        { date: 'Mon 20/01', values: [138, 349, 160, 269, 100, 380, 368, 560] }
+        { date: 'Sun 19/01', values: [256, 135, 459] },
+        { date: 'Mon 20/01', values: [138, 349, 160] }
       ]
     };
 
     const tableBody = document.querySelector('#dataTable tbody');
     const gameSelector = document.getElementById('gameSelector');
-    const playButton = document.getElementById('playButton');
-    const userSection = document.getElementById('userSection');
-    const authForm = document.getElementById('authForm');
-    const actionButtons = document.getElementById('actionButtons');
-    const loginRegisterButton = document.getElementById('loginRegisterButton');
     const numberArea = document.getElementById('numberArea');
     const numberButtonsContainer = document.getElementById('numberButtons');
     const selectedNumbersDisplay = document.getElementById('selectedNumbers');
-    const singleButton = document.getElementById('singleButton');
 
     function populateTable(gameData) {
-      tableBody.innerHTML = ''; 
+      tableBody.innerHTML = '';
       gameData.forEach(row => {
         const tr = document.createElement('tr');
         const dateCell = document.createElement('td');
         dateCell.textContent = row.date;
         tr.appendChild(dateCell);
+
+        let sum = 0;
         row.values.forEach(value => {
           const td = document.createElement('td');
           td.textContent = value;
           tr.appendChild(td);
+          sum += value;
         });
+
+        const sumCell = document.createElement('td');
+        sumCell.classList.add('result-sum');
+        sumCell.textContent = sum;
+        tr.appendChild(sumCell);
+
         tableBody.appendChild(tr);
       });
     }
@@ -222,23 +177,7 @@
       populateTable(data[selectedGame]);
     });
 
-    playButton.addEventListener('click', () => {
-      userSection.style.display = 'block';
-    });
-
-    loginRegisterButton.addEventListener('click', () => {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      if (email && password) {
-        alert(`Welcome, ${email}!`);
-        authForm.style.display = 'none';
-        actionButtons.style.display = 'flex';
-      } else {
-        alert('Please enter valid email and password.');
-      }
-    });
-
-    singleButton.addEventListener('click', () => {
+    document.getElementById('playButton').addEventListener('click', () => {
       numberArea.style.display = 'block';
       numberButtonsContainer.innerHTML = '';
 
