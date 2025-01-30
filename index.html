@@ -3,18 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Game Table (Digit Alignment)</title>
+  <title>Game Table Version 1.0</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       background-color: #f9f9f9;
       margin: 0;
-      padding: 0;
     }
 
     h1 {
       text-align: center;
-      font-size: 1.5em;
+      font-size: 2em;
       padding: 10px;
     }
 
@@ -109,18 +108,20 @@
 </head>
 <body>
 
-  <h1>Game Table (Digit Alignment)</h1>
-  <div class="game-table" id="gameTable">
-    <!-- Rows will be dynamically added here -->
-  </div>
+  <h1>Game Table Version 1.0</h1>
+  <div class="game-table" id="gameTable"></div>
 
   <script>
-    const gameData = [
-      { date: 'Wed 15/01', values: [469, 138, 678, 577, 290, 880, 458, 236] },
-      { date: 'Thu 16/01', values: [460, 790, 789, 239, 345, 290, 680, 899] },
-      { date: 'Fri 17/01', values: [340, 447, 167, 670, 237, 468, 770, 378] },
-      { date: 'Sat 18/01', values: [480, 159, 399, 358, 140, 460, 289, 889] }
-    ];
+    const gameData = {
+      "kolkataFatafat": [
+        { date: 'Wed 15/01', values: [469, 138, 678, 577, 290, 880, 458, 236] },
+        { date: 'Thu 16/01', values: [460, 790, 789, 239, 345, 290, 680, 899] },
+        { date: 'Fri 17/01', values: [340, 447, 167, 670, 237, 468, 770, 378] },
+        { date: 'Sat 18/01', values: [480, 159, 399, 358, 140, 460, 289, 889] }
+      ]
+    };
+
+    const selectedGame = "kolkataFatafat";
 
     function calculateSumOfDigits(number) {
       const digits = number.toString().split('').map(Number);
@@ -162,7 +163,7 @@
     }
 
     const gameTable = document.getElementById('gameTable');
-    gameData.forEach(entry => {
+    gameData[selectedGame].forEach(entry => {
       const row = createRow(entry.date, entry.values);
       gameTable.appendChild(row);
     });
