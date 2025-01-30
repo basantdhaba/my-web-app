@@ -49,6 +49,27 @@
       background-color: #0056b3;
     }
 
+    .box-container {
+      display: flex;
+      justify-content: space-evenly;
+      margin-top: 10px;
+      text-align: center;
+      background-color: #f8f9fa;
+      padding: 10px 0;
+      position: sticky;
+      top: 60px;
+      z-index: 999;
+    }
+
+    .box {
+      background-color: #e0f7fa;
+      padding: 15px 20px;
+      border-radius: 5px;
+      width: 30%;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+
     .game-table {
       width: 100%;
       max-width: 1000px;
@@ -117,6 +138,10 @@
         font-size: 1.2em;
         height: 70px;
       }
+
+      .box {
+        width: 28%;
+      }
     }
 
     @media (max-width: 480px) {
@@ -133,6 +158,11 @@
         font-size: 1em;
         height: 60px;
       }
+
+      .box {
+        width: 30%;
+        font-size: 1em;
+      }
     }
   </style>
 </head>
@@ -147,6 +177,18 @@
       <option value="gmMatka">GM Matka</option>
     </select>
     <button id="playButton">Play</button>
+  </div>
+
+  <div class="box-container">
+    <div class="box" style="background-color: #e0f7fa;">
+      Single
+    </div>
+    <div class="box" style="background-color: #ffe0b2;">
+      Patti
+    </div>
+    <div class="box" style="background-color: #c8e6c9;">
+      Juri
+    </div>
   </div>
 
   <div class="game-table" id="gameTable"></div>
