@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Game Table (Enhanced Responsive)</title>
+  <title>Game Table (Digit Alignment)</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -54,6 +54,7 @@
       flex: 1;
       height: 60px;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       background-color: #e0e7ff;
@@ -65,12 +66,15 @@
       text-align: center;
     }
 
+    .bazi-number {
+      font-size: 1.5em;
+    }
+
     .sum-digit {
+      font-size: 1em;
+      color: #333;
       position: absolute;
       bottom: 5px;
-      right: 5px;
-      font-size: 0.85em;
-      color: #333;
     }
 
     /* Responsive Design */
@@ -104,7 +108,7 @@
 </head>
 <body>
 
-  <h1>Game Table (Enhanced Responsive)</h1>
+  <h1>Game Table (Digit Alignment)</h1>
   <div class="game-table" id="gameTable">
     <!-- Rows will be dynamically added here -->
   </div>
@@ -137,13 +141,17 @@
       values.forEach(value => {
         const baziBox = document.createElement('div');
         baziBox.classList.add('bazi-box');
-        baziBox.textContent = value;
+
+        const numberSpan = document.createElement('div');
+        numberSpan.classList.add('bazi-number');
+        numberSpan.textContent = value;
 
         const sumDigit = calculateSumOfDigits(value);
-        const sumSpan = document.createElement('span');
+        const sumSpan = document.createElement('div');
         sumSpan.classList.add('sum-digit');
         sumSpan.textContent = sumDigit;
 
+        baziBox.appendChild(numberSpan);
         baziBox.appendChild(sumSpan);
         baziResults.appendChild(baziBox);
       });
