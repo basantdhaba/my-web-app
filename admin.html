@@ -5,19 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - Satta Matka</title>
     <style>
-        body { background-color: #222; color: white; text-align: center; font-family: Arial, sans-serif; }
-        input { padding: 10px; margin: 10px; }
-        button { padding: 10px 20px; cursor: pointer; }
-        table { width: 80%; margin: auto; border-collapse: collapse; }
+        body { background-color: #222; color: white; text-align: center; font-family: Arial, sans-serif; padding: 20px; }
+        input, button { padding: 10px; margin: 10px; font-size: 16px; }
+        button { cursor: pointer; background: #ff9800; border: none; color: white; }
+        table { width: 90%; margin: auto; border-collapse: collapse; background: #333; color: white; }
         th, td { border: 1px solid white; padding: 10px; text-align: center; }
+        th { background: #444; }
         #admin-panel { display: none; }
+        .container { max-width: 500px; margin: auto; background: #333; padding: 20px; border-radius: 10px; }
     </style>
 </head>
 <body>
+
     <h1>Admin Login - Satta Matka</h1>
 
     <!-- Login Form -->
-    <div id="login-form">
+    <div id="login-form" class="container">
         <label>Username:</label>
         <input type="text" id="admin-username">
         <label>Password:</label>
@@ -48,18 +51,20 @@
             </thead>
             <tbody id="betsTableBody"></tbody>
         </table>
+
+        <button onclick="logout()">Logout</button>
     </div>
 
     <script>
-        let adminLoggedIn = false;
+        let API_BASE_URL = "https://your-vercel-app.vercel.app/api";  // Change this to your deployed Vercel URL
 
-        // Login function
-        async function login() {
+        // Admin Login
+        function login() {
             let username = document.getElementById("admin-username").value;
             let password = document.getElementById("admin-password").value;
 
             if (username === "admin" && password === "admin123") {
-                adminLoggedIn = true;
+                localStorage.setItem("adminLoggedIn", "true");
                 document.getElementById("login-form").style.display = "none";
                 document.getElementById("admin-panel").style.display = "block";
                 fetchBets();
@@ -68,42 +73,66 @@
             }
         }
 
-        // Fetch all bets from the server
+        // Check if admin is already logged in
+        window.onload = function () {
+            if (localStorage.getItem("adminLoggedIn") === "true") {
+                document.getElementById("login-form").style.display = "none";
+                document.getElementById("admin-panel").style.display = "block";
+                fetchBets();
+            }
+        };
+
+        // Fetch all bets from server
         async function fetchBets() {
-            let res = await fetch("/all-bets");
-            let data = await res.json();
+            try {
+                let res = await fetch(`${API_BASE_URL}/all-bets`);
+                let data = await res.json();
 
-            let tableBody = document.getElementById("betsTableBody");
-            tableBody.innerHTML = "";
+                let tableBody = document.getElementById("betsTableBody");
+                tableBody.innerHTML = "";
 
-            data.bets.forEach(bet => {
-                let row = `<tr>
-                    <td>${bet.username}</td>
-                    <td>${bet.round}</td>
-                    <td>${bet.type}</td>
-                    <td>${bet.number}</td>
-                    <td>₹${bet.amount}</td>
-                    <td>${bet.result ? bet.result : "Pending"}</td>
-                </tr>`;
-                tableBody.innerHTML += row;
-            });
+                data.bets.forEach(bet => {
+                    let row = `<tr>
+                        <td>${bet.username}</td>
+                        <td>${bet.round}</td>
+                        <td>${bet.type}</td>
+                        <td>${bet.number}</td>
+                        <td>₹${bet.amount}</td>
+                        <td>${bet.result ? bet.result : "Pending"}</td>
+                    </tr>`;
+                    tableBody.innerHTML += row;
+                });
+            } catch (error) {
+                console.error("Error fetching bets:", error);
+            }
         }
 
-        // Submit the 3-digit result and calculate the winnings
+        // Submit 3-digit result and calculate single-digit result
         async function submitResult() {
             let threeDigitNumber = document.getElementById("threeDigitResult").value;
             if (!/^\d{3}$/.test(threeDigitNumber)) return alert("Enter a valid 3-digit number!");
 
-            let res = await fetch("/update-result", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ threeDigitNumber })
-            });
+            try {
+                let res = await fetch(`${API_BASE_URL}/update-result`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ threeDigitNumber })
+                });
 
-            let data = await res.json();
-            alert(data.message);
-            fetchBets();
+                let data = await res.json();
+                alert(data.message);
+                fetchBets();
+            } catch (error) {
+                console.error("Error submitting result:", error);
+            }
+        }
+
+        // Admin Logout
+        function logout() {
+            localStorage.removeItem("adminLoggedIn");
+            location.reload();
         }
     </script>
+
 </body>
 </html>
