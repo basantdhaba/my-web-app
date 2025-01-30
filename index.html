@@ -1,15 +1,237 @@
-const demoEmail = "test@demo.com";
-const demoPassword = "12345";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game Table with User Actions</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+    }
 
-loginRegisterButton.addEventListener('click', () => {
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
+    h1 {
+      text-align: center;
+      font-size: 2em;
+      padding: 10px;
+    }
 
-  if (email === demoEmail && password === demoPassword) {
-    alert(`Welcome back, ${email}!`);
-    authForm.style.display = 'none';
-    actionButtons.style.display = 'flex';
-  } else {
-    alert('Invalid credentials! Use demo: test@demo.com / 12345');
-  }
-});
+    .header {
+      position: sticky;
+      top: 0;
+      background: #fff;
+      z-index: 1000;
+      padding: 10px 0;
+      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    select {
+      padding: 10px;
+      font-size: 1.2em;
+      text-align: center;
+    }
+
+    button {
+      padding: 10px 15px;
+      font-size: 1.2em;
+      cursor: pointer;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .scroll-container {
+      max-height: 400px;
+      overflow-y: auto;
+      margin-top: 10px;
+    }
+
+    .user-section {
+      display: none;
+      padding: 20px;
+      background-color: #f0f0f0;
+      text-align: center;
+    }
+
+    .user-section form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 300px;
+      margin: 0 auto;
+    }
+
+    input[type="email"], input[type="password"] {
+      padding: 10px;
+      font-size: 1em;
+      width: 100%;
+    }
+
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .action-buttons button {
+      padding: 15px 30px;
+      font-size: 1.2em;
+      background-color: #28a745;
+      border-radius: 8px;
+    }
+
+    .action-buttons button:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>Game Data Table</h1>
+    <select id="gameSelector">
+      <option value="kolkataFatafat">Kolkata Fatafat</option>
+      <option value="mainBazar">Main Bazar</option>
+      <option value="gmMatka">GM Matka</option>
+    </select>
+    <button id="playButton">Play</button>
+  </div>
+
+  <div class="user-section" id="userSection">
+    <!-- Login/Register Form -->
+    <form id="authForm">
+      <h2>Login or Register</h2>
+      <input type="email" id="email" placeholder="Enter your email" required />
+      <input type="password" id="password" placeholder="Enter your password" required />
+      <button type="button" id="loginRegisterButton">Submit</button>
+    </form>
+
+    <!-- Action Buttons for Registered Users -->
+    <div id="actionButtons" class="action-buttons" style="display: none;">
+      <button>Single</button>
+      <button>Patti</button>
+      <button>Judi</button>
+    </div>
+  </div>
+
+  <div class="scroll-container">
+    <table id="dataTable">
+      <caption>Data Table for Selected Game</caption>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>1st Bazi</th>
+          <th>2nd Bazi</th>
+          <th>3rd Bazi</th>
+          <th>4th Bazi</th>
+          <th>5th Bazi</th>
+          <th>6th Bazi</th>
+          <th>7th Bazi</th>
+          <th>8th Bazi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Dynamic Data Rows will go here -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    const data = {
+      kolkataFatafat: [
+        { date: 'Wed 15/01', values: [469, 138, 678, 577, 290, 880, 458, 236] },
+        { date: 'Thu 16/01', values: [460, 790, 789, 239, 345, 290, 680, 899] }
+      ],
+      mainBazar: [
+        { date: 'Fri 17/01', values: [340, 447] },
+        { date: 'Sat 18/01', values: [480, 159] }
+      ],
+      gmMatka: [
+        { date: 'Sun 19/01', values: [256, 135, 459, 344, 100, 200, 345, 456] },
+        { date: 'Mon 20/01', values: [138, 349, 160, 269, 100, 380, 368, 560] }
+      ]
+    };
+
+    const tableBody = document.querySelector('#dataTable tbody');
+    const gameSelector = document.getElementById('gameSelector');
+    const playButton = document.getElementById('playButton');
+    const userSection = document.getElementById('userSection');
+    const authForm = document.getElementById('authForm');
+    const actionButtons = document.getElementById('actionButtons');
+    const loginRegisterButton = document.getElementById('loginRegisterButton');
+
+    function populateTable(gameData) {
+      tableBody.innerHTML = ''; 
+
+      gameData.forEach(row => {
+        const tr = document.createElement('tr');
+        const dateCell = document.createElement('td');
+        dateCell.textContent = row.date;
+        dateCell.classList.add('day');
+        tr.appendChild(dateCell);
+
+        row.values.forEach(value => {
+          const td = document.createElement('td');
+          const boxContent = document.createElement('div');
+          boxContent.classList.add('box-content');
+
+          const originalNumber = document.createElement('div');
+          originalNumber.textContent = value;
+
+          const digits = value.toString().split('').map(Number);
+          const digitSum = digits.reduce((acc, num) => acc + num, 0);
+          const lastDigit = digitSum % 10;
+
+          const sumDigit = document.createElement('div');
+          sumDigit.textContent = lastDigit;
+          sumDigit.classList.add('sum-digit');
+
+          boxContent.appendChild(originalNumber);
+          boxContent.appendChild(sumDigit);
+
+          td.appendChild(boxContent);
+          tr.appendChild(td);
+        });
+
+        tableBody.appendChild(tr);
+      });
+    }
+
+    populateTable(data.kolkataFatafat);
+
+    gameSelector.addEventListener('change', () => {
+      const selectedGame = gameSelector.value;
+      populateTable(data[selectedGame]);
+    });
+
+    playButton.addEventListener('click', () => {
+      userSection.style.display = 'block';
+    });
+
+    loginRegisterButton.addEventListener('click', () => {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      if (email && password) {
+        alert(`Welcome, ${email}!`);
+        authForm.style.display = 'none';
+        actionButtons.style.display = 'flex';
+      } else {
+        alert('Please enter valid email and password.');
+      }
+    });
+  </script>
+</body>
+</html>
