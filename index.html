@@ -1,49 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Satta Matka - Play</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Table Interface</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background-color: #ffffff;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      text-align: center;
+      padding: 10px;
+    }
+
+    th {
+      background-color: #f2f2f2;
+      color: #333;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    caption {
+      font-size: 1.5em;
+      margin-bottom: 10px;
+    }
+
+    .day {
+      font-weight: bold;
+      color: #555;
+    }
+  </style>
 </head>
 <body>
-<div class="login-container">
-    <h2>Login to Play</h2>
-    <input type="text" id="username" placeholder="Enter Username">
-    <input type="password" id="password" placeholder="Enter Password">
-    <button onclick="login()">Login</button>
-    <button onclick="register()">Register</button>
-</div>
-<p id="loginMessage"></p>
+  <table id="dataTable">
+    <caption>Daily Data Table</caption>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Col 1</th>
+        <th>Col 2</th>
+        <th>Col 3</th>
+        <th>Col 4</th>
+        <th>Col 5</th>
+        <th>Col 6</th>
+        <th>Col 7</th>
+        <th>Col 8</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Dynamic Data Rows will go here -->
+    </tbody>
+  </table>
 
-    <div class="container">
-        <h2>Login or Signup</h2>
-        <input type="text" id="username" placeholder="Enter Username">
-        <button onclick="login()">Login / Signup</button>
-        <p id="wallet"></p>
-    </div>
+  <script>
+    // Sample Data
+    const data = [
+      { date: 'Wed 15/01', values: [469, 138, 678, 577, 290, 880, 458, 236] },
+      { date: 'Thu 16/01', values: [460, 790, 789, 239, 345, 290, 680, 899] },
+      { date: 'Fri 17/01', values: [340, 447, 167, 670, 237, 468, 770, 378] },
+      // Add more rows as needed
+    ];
 
-    <div class="container">
-        <h2>Place Your Bet</h2>
-        <div class="number-grid">
-            <!-- Number buttons 0-9 -->
-            <button onclick="selectNumber(0)">0</button>
-            <button onclick="selectNumber(1)">1</button>
-            <button onclick="selectNumber(2)">2</button>
-            <button onclick="selectNumber(3)">3</button>
-            <button onclick="selectNumber(4)">4</button>
-            <button onclick="selectNumber(5)">5</button>
-            <button onclick="selectNumber(6)">6</button>
-            <button onclick="selectNumber(7)">7</button>
-            <button onclick="selectNumber(8)">8</button>
-            <button onclick="selectNumber(9)">9</button>
-        </div>
+    // Populate Table Function
+    const tableBody = document.querySelector('#dataTable tbody');
+    
+    data.forEach(row => {
+      const tr = document.createElement('tr');
+      const dateCell = document.createElement('td');
+      dateCell.textContent = row.date;
+      dateCell.classList.add('day');
+      tr.appendChild(dateCell);
 
-        <p>Selected Numbers: <span id="selectedNumbers"></span></p>
-        <input type="number" id="betAmount" placeholder="Enter Bet Amount (Min ₹10)" min="10">
-        <button onclick="placeBet()">Place Bet</button>
-    </div>
+      row.values.forEach(value => {
+        const td = document.createElement('td');
+        td.textContent = value;
+        tr.appendChild(td);
+      });
 
-    <script src="script.js"></script>
+      tableBody.appendChild(tr);
+    });
+  </script>
 </body>
 </html>
