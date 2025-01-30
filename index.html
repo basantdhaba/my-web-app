@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Game Table Version 1.1</title>
+  <title>Game Table Version 1.1 - Responsive</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -61,6 +61,7 @@
       width: 100%;
       border-collapse: collapse;
       margin: 0 auto;
+      table-layout: auto;
     }
 
     th, td {
@@ -68,6 +69,7 @@
       padding: 8px;
       text-align: center;
       position: relative;
+      white-space: nowrap;
     }
 
     td span.sum {
@@ -78,29 +80,35 @@
       color: #333;
     }
 
-    .user-section {
-      display: none;
-      padding: 20px;
-      background-color: #f0f0f0;
-      text-align: center;
-    }
+    /* Responsive Styles */
+    @media screen and (max-width: 768px) {
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
 
-    .action-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      margin-top: 20px;
-    }
+      thead tr {
+        display: none;
+      }
 
-    .action-buttons button {
-      padding: 15px 30px;
-      font-size: 1.2em;
-      background-color: #28a745;
-      border-radius: 8px;
-    }
+      tbody tr {
+        margin-bottom: 10px;
+        display: block;
+        border-bottom: 2px solid #ddd;
+      }
 
-    .action-buttons button:hover {
-      background-color: #218838;
+      td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        text-align: left;
+      }
+
+      td:before {
+        content: attr(data-label);
+        font-weight: bold;
+        text-transform: capitalize;
+      }
     }
   </style>
 </head>
@@ -168,18 +176,20 @@
       gameData.forEach(row => {
         const tr = document.createElement('tr');
         const dateCell = document.createElement('td');
+        dateCell.setAttribute('data-label', 'Date');
         dateCell.textContent = row.date;
         tr.appendChild(dateCell);
-        row.values.forEach(value => {
+        row.values.forEach((value, index) => {
           const td = document.createElement('td');
+          td.setAttribute('data-label', `${index + 1}th Bazi`);
           td.textContent = value;
-          
+
           // Calculate sum and append
           const sumDigit = calculateSumOfDigits(value);
           const sumSpan = document.createElement('span');
           sumSpan.classList.add('sum');
           sumSpan.textContent = sumDigit;
-          
+
           td.appendChild(sumSpan);
           tr.appendChild(td);
         });
@@ -195,3 +205,4 @@
     });
   </script>
 </body>
+</html>
