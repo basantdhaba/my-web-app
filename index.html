@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Game Table Version 1.0</title>
+  <title>Game Table Version 3.0</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -25,8 +25,9 @@
       padding: 10px 0;
       box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
       display: flex;
+      align-items: center;
       justify-content: center;
-      gap: 15px;
+      gap: 10px;
     }
 
     select {
@@ -106,6 +107,30 @@
       margin-top: 8px;
     }
 
+    #loginSection {
+      margin-top: 10px;
+      padding: 10px;
+      background-color: #f9f9f9;
+      width: 300px;
+      border: 1px solid #ddd;
+      display: none;
+    }
+
+    #boxContainer {
+      display: none;
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-evenly;
+      text-align: center;
+    }
+
+    .box {
+      background-color: #f0f0f0;
+      padding: 20px;
+      border-radius: 5px;
+      width: 30%;
+    }
+
     /* Responsive Design */
     @media (max-width: 768px) {
       .date {
@@ -137,7 +162,7 @@
 </head>
 <body>
 
-  <h1>Game Table Version 1.0</h1>
+  <h1>Game Table Version 3.0</h1>
   
   <div class="header">
     <select id="gameSelector">
@@ -148,7 +173,7 @@
     <button id="playButton">Play</button>
   </div>
 
-  <div id="loginSection" style="display: none; margin-top: 10px; padding: 10px; background-color: #f9f9f9; width: 300px; border: 1px solid #ddd;">
+  <div id="loginSection">
     <h3>Login or Register</h3>
     <input type="email" id="email" placeholder="Enter your email" required style="width: 90%; padding: 8px; margin: 5px 0;">
     <input type="password" id="password" placeholder="Enter your password" required style="width: 90%; padding: 8px; margin: 5px 0;">
@@ -156,6 +181,18 @@
   </div>
 
   <div class="game-table" id="gameTable"></div>
+
+  <div id="boxContainer">
+    <div class="box" style="background-color: #e0f7fa;">
+      <h3>Single</h3>
+    </div>
+    <div class="box" style="background-color: #ffe0b2;">
+      <h3>Patti</h3>
+    </div>
+    <div class="box" style="background-color: #c8e6c9;">
+      <h3>Juri</h3>
+    </div>
+  </div>
 
   <script>
     const gameData = {
@@ -214,6 +251,10 @@
 
     const gameTable = document.getElementById('gameTable');
     const gameSelector = document.getElementById('gameSelector');
+    const playButton = document.getElementById('playButton');
+    const loginSection = document.getElementById('loginSection');
+    const loginSubmitButton = document.getElementById('loginSubmitButton');
+    const boxContainer = document.getElementById('boxContainer');
 
     function populateTable(selectedGame) {
       gameTable.innerHTML = '';
@@ -227,20 +268,20 @@
       populateTable(gameSelector.value);
     });
 
-    document.getElementById('playButton').addEventListener('click', () => {
-      const loginSection = document.getElementById('loginSection');
-      loginSection.style.display = loginSection.style.display === 'none' ? 'block' : 'none';
+    playButton.addEventListener('click', () => {
+      loginSection.style.display = 'block';
     });
 
-    document.getElementById('loginSubmitButton').addEventListener('click', () => {
+    loginSubmitButton.addEventListener('click', () => {
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
 
       if (email === 'test@demo.com' && password === '12345') {
         alert('Login successful!');
-        document.getElementById('loginSection').style.display = 'none';
+        loginSection.style.display = 'none';
+        boxContainer.style.display = 'flex';
       } else {
-        alert('Invalid credentials. Use test@demo.com and password 12345.');
+        alert('Invalid login credentials!');
       }
     });
 
